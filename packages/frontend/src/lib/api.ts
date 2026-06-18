@@ -27,24 +27,46 @@ export async function apiRequest<T>(
 
 /**
  * Uploads an image file to storage and returns its public URL.
- * Sends multipart/form-data — does NOT set Content-Type so the browser can
- * add the correct multipart boundary.
+ * Uses XMLHttpRequest (not fetch) so we can report upload progress via the
+ * optional onProgress callback (0–100).
  */
-export async function uploadImage(file: File): Promise<string> {
-  const formData = new FormData();
-  formData.append('file', file);
+export function uploadImage(
+  file: File,
+  onProgress?: (percent: number) => void
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const formData = new FormData();
+    formData.append('file', file);
 
-  const response = await fetch(`${API_BASE}/storage/upload`, {
-    method: 'POST',
-    body: formData,
-    credentials: 'include',
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `${API_BASE}/storage/upload`);
+    xhr.withCredentials = true; // send session cookie
+
+    xhr.upload.onprogress = (e) => {
+      if (onProgress && e.lengthComputable) {
+        onProgress(Math.round((e.loaded / e.total) * 100));
+      }
+    };
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          resolve((JSON.parse(xhr.responseText) as { url: string }).url);
+        } catch {
+          reject(new Error('Invalid server response'));
+        }
+      } else {
+        let message = 'Upload failed';
+        try {
+          message = JSON.parse(xhr.responseText).error || message;
+        } catch {
+          /* keep default */
+        }
+        reject(new Error(message));
+      }
+    };
+
+    xhr.onerror = () => reject(new Error('Network error during upload'));
+    xhr.send(formData);
   });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: 'Upload failed' }));
-    throw new Error(error.error || 'Upload failed');
-  }
-
-  const data = (await response.json()) as { url: string };
-  return data.url;
 }

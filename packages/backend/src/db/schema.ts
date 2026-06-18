@@ -1,6 +1,8 @@
 import { pgTable, text, timestamp, boolean, jsonb, serial } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { z } from 'zod';
+// drizzle-zod@0.8 is built against zod v4 — import the matching API so the
+// override schemas passed to createInsertSchema are recognized as Zod schemas.
+import { z } from 'zod/v4';
 
 export const sermons = pgTable('sermons', {
   id: serial('id').primaryKey(),
@@ -60,13 +62,22 @@ export const aboutCards = pgTable('about_cards', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
+// imageUrl may be an absolute http(s) URL (e.g. a YouTube thumbnail) or a
+// root-relative path returned by our upload endpoint (e.g. /uploads/x.png).
+const imageUrlSchema = z
+  .string()
+  .refine((v) => v.startsWith('/') || /^https?:\/\//i.test(v), {
+    message: 'Must be a URL or an uploaded image path',
+  })
+  .optional();
+
 export const insertSermonSchema = createInsertSchema(sermons, {
   title: z.string().min(1),
   speaker: z.string().min(1),
   date: z.string().min(1),
   description: z.string().min(1),
   videoUrl: z.string().url(),
-  imageUrl: z.string().url().optional(),
+  imageUrl: imageUrlSchema,
 });
 
 export const selectSermonSchema = createSelectSchema(sermons);
@@ -77,7 +88,7 @@ export const insertEventSchema = createInsertSchema(events, {
   date: z.string().min(1),
   time: z.string().min(1),
   location: z.string().min(1),
-  imageUrl: z.string().url().optional(),
+  imageUrl: imageUrlSchema,
 });
 
 export const selectEventSchema = createSelectSchema(events);
@@ -94,14 +105,14 @@ export const insertTeamSchema = createInsertSchema(team, {
   name: z.string().min(1),
   role: z.string().min(1),
   bio: z.string().min(1),
-  imageUrl: z.string().url().optional(),
+  imageUrl: imageUrlSchema,
 });
 
 export const selectTeamSchema = createSelectSchema(team);
 
 export const insertContentSchema = createInsertSchema(content, {
   section: z.string().min(1),
-  data: z.record(z.any()),
+  data: z.record(z.string(), z.any()),
 });
 
 export const selectContentSchema = createSelectSchema(content);

@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react';
+import { useId, useState } from 'react';
 import { uploadImage } from '@/lib/api';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 
 interface ImageUploadProps {
   /** Current image URL (or empty string). */
@@ -12,21 +13,23 @@ interface ImageUploadProps {
 }
 
 export function ImageUpload({ value, onChange, label = 'Image' }: ImageUploadProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
+  // Unique id so multiple uploaders on one page don't share an input.
+  const inputId = useId();
   const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
   async function handleFile(file: File) {
     setError(null);
+    setProgress(0);
     setUploading(true);
     try {
-      const url = await uploadImage(file);
+      const url = await uploadImage(file, setProgress);
       onChange(url);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Upload failed');
     } finally {
       setUploading(false);
-      if (inputRef.current) inputRef.current.value = '';
     }
   }
 
@@ -44,43 +47,57 @@ export function ImageUpload({ value, onChange, label = 'Image' }: ImageUploadPro
         </div>
       ) : null}
 
+      {/* Hidden file input, opened natively by clicking its <label>. */}
       <input
-        ref={inputRef}
+        id={inputId}
         type="file"
         accept="image/*"
-        className="hidden"
+        className="sr-only"
+        disabled={uploading}
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) handleFile(file);
+          e.target.value = ''; // allow re-selecting the same file
         }}
       />
 
       <div className="flex items-center gap-2">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={uploading}
-          onClick={() => inputRef.current?.click()}
+        {/* A label tied to the file input opens the picker with no JS — works
+            reliably even though the input is visually hidden. */}
+        <label
+          htmlFor={inputId}
+          className={cn(
+            buttonVariants({ variant: 'outline', size: 'sm' }),
+            'cursor-pointer',
+            uploading && 'pointer-events-none opacity-50'
+          )}
         >
           {uploading ? 'Uploading…' : value ? 'Replace image' : 'Upload image'}
-        </Button>
-        {value ? (
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            disabled={uploading}
-            onClick={() => onChange('')}
-          >
+        </label>
+        {value && !uploading ? (
+          <Button type="button" variant="ghost" size="sm" onClick={() => onChange('')}>
             Remove
           </Button>
         ) : null}
       </div>
 
-      {/* Allow pasting an external URL (e.g. a YouTube thumbnail) as a fallback. */}
+      {uploading ? (
+        <div className="mt-2">
+          <div className="h-2 w-full overflow-hidden rounded bg-gray-200">
+            <div
+              className="h-full bg-primary transition-all duration-150"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <p className="mt-1 text-xs text-gray-500">Uploading… {progress}%</p>
+        </div>
+      ) : null}
+
+      {/* Allow pasting a URL or relative path as a fallback. Uses type="text"
+          (not "url") so an uploaded relative path like /uploads/abc.png passes
+          HTML5 form validation. */}
       <Input
-        type="url"
+        type="text"
         value={value}
         placeholder="…or paste an image URL"
         className="mt-2"
