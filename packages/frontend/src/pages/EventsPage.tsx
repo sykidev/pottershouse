@@ -1,3 +1,4 @@
+import { Link } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api';
 import { Calendar, Clock, MapPin, Sparkles } from 'lucide-react';
@@ -104,9 +105,9 @@ export function EventsPage() {
               upcomingEvents.map((event) => {
                 const status = getEventStatus(event.date);
                 return (
-                  <div
-                    key={event.id}
-                    className="group relative bg-white rounded-3xl border-2 border-gray-100 hover:border-crimson/30 p-8 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+                  <Link key={event.id} href={`/events/${event.id}`}>
+                  <a
+                    className="group relative block bg-white rounded-3xl border-2 border-gray-100 hover:border-crimson/30 p-8 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
                   >
                     {/* Gradient glow on hover */}
                     <div className="absolute inset-0 bg-gradient-to-r from-crimson/5 to-amber/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -153,7 +154,8 @@ export function EventsPage() {
 
                     {/* Decorative corner */}
                     <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-gradient-to-tl from-crimson/10 to-transparent rounded-full blur-3xl group-hover:scale-150 transition-transform duration-500" />
-                  </div>
+                  </a>
+                  </Link>
                 );
               })
             ) : (
@@ -177,9 +179,9 @@ export function EventsPage() {
 
             <div className="space-y-6">
               {pastEvents.map((event) => (
-                <div
-                  key={event.id}
-                  className="bg-white/60 backdrop-blur-sm rounded-3xl border-2 border-gray-200 p-8 opacity-75 hover:opacity-100 transition-opacity duration-300"
+                <Link key={event.id} href={`/events/${event.id}`}>
+                <a
+                  className="block bg-white/60 backdrop-blur-sm rounded-3xl border-2 border-gray-200 p-8 opacity-75 hover:opacity-100 transition-opacity duration-300"
                 >
                   <div className="flex items-start gap-2 mb-3">
                     <Calendar className="w-5 h-5 text-gray-400 mt-1" />
@@ -208,7 +210,8 @@ export function EventsPage() {
                   </div>
 
                   <p className="text-gray-700 leading-relaxed">{event.description}</p>
-                </div>
+                </a>
+                </Link>
               ))}
             </div>
           </div>

@@ -13,6 +13,7 @@ export function Navbar() {
     { href: '/sermons', label: 'Sermons' },
     { href: '/events', label: 'Events' },
     { href: '/ministries', label: 'Ministries' },
+    { href: '/gallery', label: 'Gallery' },
   ];
 
   // Lock body scroll when menu is open

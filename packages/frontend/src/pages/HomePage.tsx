@@ -242,7 +242,8 @@ export function HomePage() {
           <div className="grid md:grid-cols-3 gap-8">
             {upcomingEvents.map((event, index) => (
               <AnimatedCard key={event.id} delay={index * 150}>
-                <div className="bg-white rounded-3xl border border-royal-200/50 overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 group cursor-pointer">
+                <Link href={`/events/${event.id}`}>
+                <a className="block bg-white rounded-3xl border border-royal-200/50 overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 group cursor-pointer">
                   {event.imageUrl && (
                     <div className="h-56 bg-gradient-to-br from-royal-200 to-gold-200 overflow-hidden relative">
                       <img
@@ -272,7 +273,8 @@ export function HomePage() {
                     </div>
                     <p className="text-gray-700 line-clamp-2 leading-relaxed">{event.description}</p>
                   </div>
-                </div>
+                </a>
+                </Link>
               </AnimatedCard>
             ))}
           </div>

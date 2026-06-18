@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { Link } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api';
 import { useContent } from '@/lib/content';
-import { MINISTRIES_DEFAULT, MinistriesContent, Ministry } from '@/lib/site-content';
-import { Book, Music, Baby, Users, Heart, HandHeart, Sparkles, ArrowRight, X, LucideIcon } from 'lucide-react';
+import { MINISTRIES_DEFAULT, MinistriesContent, ministrySlug } from '@/lib/site-content';
+import { Book, Music, Baby, Users, Heart, HandHeart, Sparkles, ArrowRight, LucideIcon } from 'lucide-react';
 
 interface TeamMember {
   id: number;
@@ -28,7 +28,6 @@ const PALETTE = [
 
 export function MinistriesPage() {
   const page = useContent<MinistriesContent>('ministries', MINISTRIES_DEFAULT);
-  const [selected, setSelected] = useState<{ ministry: Ministry; index: number } | null>(null);
 
   const { data: team } = useQuery({
     queryKey: ['team'],
@@ -75,26 +74,25 @@ export function MinistriesPage() {
               const Icon = ICONS[ministry.icon] || Heart;
               const theme = PALETTE[index % PALETTE.length];
               return (
-                <button
-                  key={index}
-                  type="button"
-                  onClick={() => setSelected({ ministry, index })}
-                  className={`group relative text-left bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border-2 border-transparent ${theme.hoverColor} overflow-hidden flex flex-col`}
-                >
-                  <div className={`absolute inset-0 ${theme.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                  <div className="relative z-10 flex flex-col h-full">
-                    <div className={`w-16 h-16 bg-gradient-to-br ${theme.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 shadow-lg`}>
-                      <Icon className="w-8 h-8 text-white" />
+                <Link key={index} href={`/ministries/${ministrySlug(ministry.title)}`}>
+                  <a
+                    className={`group relative block bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border-2 border-transparent ${theme.hoverColor} overflow-hidden`}
+                  >
+                    <div className={`absolute inset-0 ${theme.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                    <div className="relative z-10 flex flex-col h-full">
+                      <div className={`w-16 h-16 bg-gradient-to-br ${theme.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 shadow-lg`}>
+                        <Icon className="w-8 h-8 text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-crimson transition-colors">{ministry.title}</h3>
+                      <p className="text-gray-700 leading-relaxed line-clamp-3 mb-6">{ministry.description}</p>
+                      <span className="mt-auto inline-flex items-center gap-2 text-crimson font-semibold text-sm">
+                        More Info
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </span>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-crimson transition-colors">{ministry.title}</h3>
-                    <p className="text-gray-700 leading-relaxed line-clamp-3 mb-6">{ministry.description}</p>
-                    <span className="mt-auto inline-flex items-center gap-2 text-crimson font-semibold text-sm">
-                      More Info
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </span>
-                  </div>
-                  <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-gradient-to-tl from-crimson/10 to-transparent rounded-full blur-3xl group-hover:scale-150 transition-transform duration-500" />
-                </button>
+                    <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-gradient-to-tl from-crimson/10 to-transparent rounded-full blur-3xl group-hover:scale-150 transition-transform duration-500" />
+                  </a>
+                </Link>
               );
             })}
           </div>
@@ -145,41 +143,6 @@ export function MinistriesPage() {
           </div>
         </div>
       </section>
-
-      {/* Ministry detail modal */}
-      {selected && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-          onClick={() => setSelected(null)}
-        >
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-          <div
-            className="relative z-10 w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className={`bg-gradient-to-br ${PALETTE[selected.index % PALETTE.length].color} p-8 text-white relative`}>
-              <button
-                type="button"
-                onClick={() => setSelected(null)}
-                aria-label="Close"
-                className="absolute top-4 right-4 w-9 h-9 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-4">
-                {(() => {
-                  const Icon = ICONS[selected.ministry.icon] || Heart;
-                  return <Icon className="w-8 h-8 text-white" />;
-                })()}
-              </div>
-              <h3 className="text-2xl font-serif font-bold drop-shadow">{selected.ministry.title}</h3>
-            </div>
-            <div className="p-8">
-              <p className="text-gray-700 leading-relaxed text-lg">{selected.ministry.description}</p>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

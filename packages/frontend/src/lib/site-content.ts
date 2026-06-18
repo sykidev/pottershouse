@@ -32,6 +32,7 @@ export const FOOTER_DEFAULT: FooterContent = {
     { label: 'Events', href: '/events' },
     { label: 'Visit Us', href: '/visit' },
     { label: 'Ministries', href: '/ministries' },
+    { label: 'Gallery', href: '/gallery' },
     { label: 'Give', href: '/give' },
   ],
   scripture: '"We are the clay, You are the Potter" - Isaiah 64:8',
@@ -81,6 +82,16 @@ export const VISIT_DEFAULT: VisitContent = {
   ],
   ctaHeading: "We'd love to see you this week",
 };
+
+// URL-safe slug for a ministry, used for /ministries/:slug detail routes.
+export function ministrySlug(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[()'.,]/g, '')
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
 
 export interface MinistriesContent {
   heroTitle: string;
@@ -156,4 +167,37 @@ export const GIVE_DEFAULT: GiveContent = {
     { label: 'Telegram', url: 'https://t.me/thepottersapostolic' },
     { label: 'Mixlr', url: 'http://thepottersglobal.mixlr.com' },
   ],
+};
+
+// Gallery tags double as ministry references so tagged photos can later be
+// surfaced on the matching ministry pages. Keep the ministry tags identical
+// to the ministry titles in MINISTRIES_DEFAULT.
+export const GALLERY_TAGS = [
+  'General',
+  'Men of Power',
+  'Ladies Forum',
+  "Teens' Club",
+  'School of Basic Leadership and Discipleship (SBLD)',
+  "The Potter's School of Ministry and Mentorship (TPSOMM)",
+  'Crusade and Outreach Ministry',
+];
+
+export interface GalleryImage {
+  url: string;
+  caption: string;
+  tag: string;
+}
+
+export interface GalleryContent {
+  heroTitle: string;
+  heroSubtitle: string;
+  instagramUrl: string;
+  images: GalleryImage[];
+}
+
+export const GALLERY_DEFAULT: GalleryContent = {
+  heroTitle: 'Gallery',
+  heroSubtitle: 'Moments from our services, ministries, and outreaches.',
+  instagramUrl: 'https://www.instagram.com/thepottersapostolicministries/',
+  images: [],
 };

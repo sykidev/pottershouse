@@ -11,7 +11,10 @@ import { SermonsPage } from '@/pages/SermonsPage';
 import { EventsPage } from '@/pages/EventsPage';
 import { VisitPage } from '@/pages/VisitPage';
 import { MinistriesPage } from '@/pages/MinistriesPage';
+import { MinistryDetailPage } from '@/pages/MinistryDetailPage';
 import { GivePage } from '@/pages/GivePage';
+import { GalleryPage } from '@/pages/GalleryPage';
+import { EventDetailPage } from '@/pages/EventDetailPage';
 import { LoginPage } from '@/pages/admin/LoginPage';
 import { DashboardPage } from '@/pages/admin/DashboardPage';
 import { AdminSermonsPage } from '@/pages/admin/SermonsPage';
@@ -24,6 +27,7 @@ import { AdminFooterPage } from '@/pages/admin/FooterPage';
 import { AdminVisitPage } from '@/pages/admin/VisitPage';
 import { AdminMinistriesPage } from '@/pages/admin/MinistriesPage';
 import { AdminGivePage } from '@/pages/admin/GivePage';
+import { AdminGalleryPage } from '@/pages/admin/GalleryPage';
 
 const queryClient = new QueryClient();
 
@@ -88,6 +92,9 @@ export default function App() {
           <Route path="/admin/give">
             <ProtectedRoute component={AdminGivePage} />
           </Route>
+          <Route path="/admin/gallery">
+            <ProtectedRoute component={AdminGalleryPage} />
+          </Route>
           <Route>
             <div className="min-h-screen bg-warm-white">
               <Navbar />
@@ -96,8 +103,11 @@ export default function App() {
                 <Route path="/about" component={AboutPage} />
                 <Route path="/sermons" component={SermonsPage} />
                 <Route path="/events" component={EventsPage} />
+                <Route path="/events/:id" component={EventDetailPage} />
                 <Route path="/visit" component={VisitPage} />
                 <Route path="/ministries" component={MinistriesPage} />
+                <Route path="/ministries/:slug" component={MinistryDetailPage} />
+                <Route path="/gallery" component={GalleryPage} />
                 <Route path="/connect">
                   <Redirect to="/ministries" />
                 </Route>

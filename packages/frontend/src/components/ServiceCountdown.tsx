@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api';
 import { Clock } from 'lucide-react';
@@ -15,7 +16,6 @@ export function ServiceCountdown() {
   });
 
   const serviceTime = data?.data?.serviceTimes || '10:00 AM';
-  const mapUrl = data?.data?.mapUrl || '#';
 
   const [countdown, setCountdown] = useState({
     days: 0,
@@ -93,17 +93,14 @@ export function ServiceCountdown() {
             </div>
           </div>
 
-          <a
-            href={mapUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-white/90 hover:text-white bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/50 px-6 py-3 rounded-full transition-all duration-300 font-medium hover:scale-105 shadow-lg backdrop-blur-sm group"
-          >
-            Get directions
-            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </a>
+          <Link href="/visit">
+            <a className="inline-flex items-center gap-2 text-white/90 hover:text-white bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/50 px-6 py-3 rounded-full transition-all duration-300 font-medium hover:scale-105 shadow-lg backdrop-blur-sm group">
+              Get directions
+              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          </Link>
         </div>
       </div>
     </section>

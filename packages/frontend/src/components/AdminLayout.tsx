@@ -14,6 +14,7 @@ import {
   MapPin,
   HandHeart,
   Sparkles,
+  Image,
   LogOut
 } from 'lucide-react';
 
@@ -39,6 +40,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
     { href: '/admin/visit', label: 'Visit Us Page', icon: MapPin },
     { href: '/admin/ministries', label: 'Ministries Page', icon: Sparkles },
     { href: '/admin/give', label: 'Give Page', icon: HandHeart },
+    { href: '/admin/gallery', label: 'Gallery', icon: Image },
     { href: '/admin/footer', label: 'Footer', icon: PanelBottom },
     { href: '/admin/content', label: 'Content', icon: FileText },
   ];
