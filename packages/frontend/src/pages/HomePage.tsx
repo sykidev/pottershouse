@@ -138,7 +138,7 @@ export function HomePage() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link href={hero?.ctaLink || '/connect'}>
+            <Link href={hero?.ctaLink || '/visit'}>
               <Button size="lg" className="bg-gradient-to-r from-royal-600 to-royal-800 hover:from-royal-700 hover:to-royal-900 text-white rounded-full px-8 md:px-10 py-6 md:py-7 text-lg md:text-xl font-semibold group hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-royal-500/50">
                 {hero?.ctaText || 'Join Us This Sunday'}
                 <ArrowRight className="ml-2 w-6 h-6 group-hover:translate-x-1 transition-transform" />
@@ -325,7 +325,7 @@ export function HomePage() {
               We'd love to meet you! Join us this Sunday and experience the transforming power of God's presence.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/connect">
+              <Link href="/visit">
                 <Button size="lg" className="bg-white text-royal-800 hover:bg-gold-50 rounded-full px-10 py-7 text-xl font-bold shadow-2xl hover:scale-105 transition-all">
                   Plan Your Visit
                   <ArrowRight className="ml-2 w-6 h-6" />

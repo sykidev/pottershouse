@@ -9,7 +9,8 @@ import { HomePage } from '@/pages/HomePage';
 import { AboutPage } from '@/pages/AboutPage';
 import { SermonsPage } from '@/pages/SermonsPage';
 import { EventsPage } from '@/pages/EventsPage';
-import { ConnectPage } from '@/pages/ConnectPage';
+import { VisitPage } from '@/pages/VisitPage';
+import { MinistriesPage } from '@/pages/MinistriesPage';
 import { GivePage } from '@/pages/GivePage';
 import { LoginPage } from '@/pages/admin/LoginPage';
 import { DashboardPage } from '@/pages/admin/DashboardPage';
@@ -21,6 +22,7 @@ import { AdminContentPage } from '@/pages/admin/ContentPage';
 import { AdminAboutCardsPage } from '@/pages/admin/AboutCardsPage';
 import { AdminFooterPage } from '@/pages/admin/FooterPage';
 import { AdminVisitPage } from '@/pages/admin/VisitPage';
+import { AdminMinistriesPage } from '@/pages/admin/MinistriesPage';
 import { AdminGivePage } from '@/pages/admin/GivePage';
 
 const queryClient = new QueryClient();
@@ -80,6 +82,9 @@ export default function App() {
           <Route path="/admin/visit">
             <ProtectedRoute component={AdminVisitPage} />
           </Route>
+          <Route path="/admin/ministries">
+            <ProtectedRoute component={AdminMinistriesPage} />
+          </Route>
           <Route path="/admin/give">
             <ProtectedRoute component={AdminGivePage} />
           </Route>
@@ -91,7 +96,11 @@ export default function App() {
                 <Route path="/about" component={AboutPage} />
                 <Route path="/sermons" component={SermonsPage} />
                 <Route path="/events" component={EventsPage} />
-                <Route path="/connect" component={ConnectPage} />
+                <Route path="/visit" component={VisitPage} />
+                <Route path="/ministries" component={MinistriesPage} />
+                <Route path="/connect">
+                  <Redirect to="/ministries" />
+                </Route>
                 <Route path="/give" component={GivePage} />
                 <Route>
                   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

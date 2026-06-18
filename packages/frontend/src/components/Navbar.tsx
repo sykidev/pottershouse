@@ -12,7 +12,7 @@ export function Navbar() {
     { href: '/about', label: 'About' },
     { href: '/sermons', label: 'Sermons' },
     { href: '/events', label: 'Events' },
-    { href: '/connect', label: 'Ministries' },
+    { href: '/ministries', label: 'Ministries' },
   ];
 
   // Lock body scroll when menu is open
@@ -67,7 +67,7 @@ export function Navbar() {
                   Give
                 </Button>
               </Link>
-              <Link href="/connect">
+              <Link href="/visit">
                 <Button className="bg-gradient-to-r from-royal-600 to-royal-700 hover:from-royal-700 hover:to-royal-800 text-white rounded-full px-8 shadow-md hover:shadow-xl hover:scale-105 transition-all">
                   Visit Us
                 </Button>
@@ -190,7 +190,7 @@ export function Navbar() {
                 Give
               </a>
             </Link>
-            <Link href="/connect">
+            <Link href="/visit">
               <a
                 className="block w-full bg-gradient-to-r from-royal-600 to-royal-700 hover:from-royal-700 hover:to-royal-800 text-white rounded-2xl py-6 text-lg font-semibold shadow-2xl hover:shadow-royal-500/50 transition-all backdrop-blur-sm text-center"
                 onClick={() => setMobileMenuOpen(false)}

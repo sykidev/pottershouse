@@ -3,7 +3,7 @@ import {
   Mail, Phone, MapPin, Clock, Instagram, Facebook, Youtube, Send, Radio, Globe, LucideIcon,
 } from 'lucide-react';
 import { useContent } from '@/lib/content';
-import { FOOTER_DEFAULT, FooterContent, CONNECT_DEFAULT, ConnectContent } from '@/lib/site-content';
+import { FOOTER_DEFAULT, FooterContent, VISIT_DEFAULT, VisitContent } from '@/lib/site-content';
 
 const SOCIAL_ICONS: Record<string, LucideIcon> = {
   Instagram,
@@ -17,7 +17,7 @@ const SOCIAL_ICONS: Record<string, LucideIcon> = {
 export function Footer() {
   const footer = useContent<FooterContent>('footer', FOOTER_DEFAULT);
   // Contact + service details are sourced from the Visit Us page so they stay in sync.
-  const connect = useContent<ConnectContent>('connect', CONNECT_DEFAULT);
+  const visit = useContent<VisitContent>('visit', VISIT_DEFAULT);
 
   return (
     <footer className="bg-gradient-to-b from-gray-900 to-black text-white">
@@ -67,13 +67,13 @@ export function Footer() {
           <div>
             <h4 className="font-semibold text-sm uppercase tracking-wider text-gray-300 mb-4">Contact Us</h4>
             <ul className="space-y-3 text-sm text-gray-400">
-              {connect.address && (
+              {visit.address && (
                 <li className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-bronze-400 mt-0.5 flex-shrink-0" />
-                  <span>{connect.address}</span>
+                  <span>{visit.address}</span>
                 </li>
               )}
-              {connect.phones.filter(Boolean).map((phone) => (
+              {visit.phones.filter(Boolean).map((phone) => (
                 <li key={phone} className="flex items-center gap-3">
                   <Phone className="w-5 h-5 text-bronze-400 flex-shrink-0" />
                   <a href={`tel:${phone.replace(/[^+\d]/g, '')}`} className="hover:text-white transition-colors break-all">
@@ -81,11 +81,11 @@ export function Footer() {
                   </a>
                 </li>
               ))}
-              {connect.email && (
+              {visit.email && (
                 <li className="flex items-center gap-3">
                   <Mail className="w-5 h-5 text-bronze-400 flex-shrink-0" />
-                  <a href={`mailto:${connect.email}`} className="hover:text-white transition-colors break-all">
-                    {connect.email}
+                  <a href={`mailto:${visit.email}`} className="hover:text-white transition-colors break-all">
+                    {visit.email}
                   </a>
                 </li>
               )}
@@ -93,11 +93,11 @@ export function Footer() {
           </div>
 
           {/* Service Times */}
-          {connect.services.length > 0 && (
+          {visit.services.length > 0 && (
             <div>
               <h4 className="font-semibold text-sm uppercase tracking-wider text-gray-300 mb-4">Service Times</h4>
               <ul className="space-y-3 text-sm">
-                {connect.services.map((s, i) => (
+                {visit.services.map((s, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <Clock className="w-5 h-5 text-bronze-400 mt-0.5 flex-shrink-0" />
                     <div>
