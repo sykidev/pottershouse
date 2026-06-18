@@ -65,6 +65,17 @@ export function AdminSermonsPage() {
     },
   });
 
+  const syncMutation = useMutation({
+    mutationFn: () => apiRequest<{ imported: number; found: number }>('/sermons/sync-youtube', { method: 'POST' }),
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: ['sermons'] });
+      alert(`Synced from YouTube: ${res.imported} new sermon(s) imported (of ${res.found} live broadcasts found).`);
+    },
+    onError: (err) => {
+      alert(`YouTube sync failed: ${(err as Error).message}`);
+    },
+  });
+
   function resetForm() {
     setFormData({
       title: '',
@@ -110,7 +121,16 @@ export function AdminSermonsPage() {
       <div className="mb-8 flex justify-between items-center">
         <h1 className="text-3xl font-bold">Manage Sermons</h1>
         {!isEditing && (
-          <Button onClick={() => setIsEditing(true)}>Add New Sermon</Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              disabled={syncMutation.isPending}
+              onClick={() => syncMutation.mutate()}
+            >
+              {syncMutation.isPending ? 'Syncing…' : 'Sync from YouTube'}
+            </Button>
+            <Button onClick={() => setIsEditing(true)}>Add New Sermon</Button>
+          </div>
         )}
       </div>
 
