@@ -153,21 +153,21 @@ export function HomePage() {
           </div>
 
           {/* Stats bar */}
-          <div className="mt-16 grid grid-cols-3 gap-6 max-w-3xl mx-auto">
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-              <Users className="w-8 h-8 text-gold-300 mx-auto mb-2" />
-              <p className="text-3xl font-bold text-white">500+</p>
-              <p className="text-gold-200 text-sm">Members</p>
+          <div className="mt-12 sm:mt-16 grid grid-cols-3 gap-3 sm:gap-6 max-w-3xl mx-auto">
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-white/20">
+              <Users className="w-7 h-7 sm:w-8 sm:h-8 text-gold-300 mx-auto mb-2" />
+              <p className="text-2xl sm:text-3xl font-bold text-white">500+</p>
+              <p className="text-gold-200 text-xs sm:text-sm">Members</p>
             </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-              <Heart className="w-8 h-8 text-gold-300 mx-auto mb-2" />
-              <p className="text-3xl font-bold text-white">20+</p>
-              <p className="text-gold-200 text-sm">Years Serving</p>
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-white/20">
+              <Heart className="w-7 h-7 sm:w-8 sm:h-8 text-gold-300 mx-auto mb-2" />
+              <p className="text-2xl sm:text-3xl font-bold text-white">20+</p>
+              <p className="text-gold-200 text-xs sm:text-sm">Years Serving</p>
             </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-              <Sparkles className="w-8 h-8 text-gold-300 mx-auto mb-2" />
-              <p className="text-3xl font-bold text-white">100+</p>
-              <p className="text-gold-200 text-sm">Lives Changed</p>
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-white/20">
+              <Sparkles className="w-7 h-7 sm:w-8 sm:h-8 text-gold-300 mx-auto mb-2" />
+              <p className="text-2xl sm:text-3xl font-bold text-white">100+</p>
+              <p className="text-gold-200 text-xs sm:text-sm">Lives Changed</p>
             </div>
           </div>
         </div>

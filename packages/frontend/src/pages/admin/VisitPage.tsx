@@ -166,7 +166,7 @@ export function AdminVisitPage() {
         <Card>
           <CardHeader><CardTitle>Ministries Section</CardTitle></CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className={field}>Heading</label>
                 <Input value={form.ministriesHeading} onChange={(e) => set('ministriesHeading', e.target.value)} />
@@ -191,7 +191,7 @@ export function AdminVisitPage() {
                       Remove
                     </Button>
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <label className={field}>Icon</label>
                       <select
@@ -230,7 +230,7 @@ export function AdminVisitPage() {
         <Card>
           <CardHeader><CardTitle>Team & Call-to-Action</CardTitle></CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className={field}>Team Heading</label>
                 <Input value={form.teamHeading} onChange={(e) => set('teamHeading', e.target.value)} />

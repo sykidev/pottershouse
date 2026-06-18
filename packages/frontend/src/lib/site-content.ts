@@ -9,9 +9,7 @@ export interface LinkItem {
 export interface FooterContent {
   aboutTitle: string;
   aboutText: string;
-  facebook: string;
-  instagram: string;
-  youtube: string;
+  socials: SocialLink[];
   quickLinks: LinkItem[];
   scripture: string;
   copyrightName: string;
@@ -21,15 +19,18 @@ export const FOOTER_DEFAULT: FooterContent = {
   aboutTitle: "The Potters' Apostolic Ministries",
   aboutText:
     'Molded by the Master Potter, empowered to transform lives through apostolic ministry. Everyone is welcome.',
-  facebook: 'https://facebook.com/yourchurch',
-  instagram: 'https://instagram.com/yourchurch',
-  youtube: 'https://youtube.com/@yourchurch',
+  socials: [
+    { label: 'Instagram', url: 'https://www.instagram.com/thepottersapostolicministries/' },
+    { label: 'Facebook', url: 'https://www.facebook.com/pottersapostolicministries/' },
+    { label: 'Telegram', url: 'https://t.me/thepottersapostolic' },
+    { label: 'Mixlr', url: 'http://thepottersglobal.mixlr.com' },
+  ],
   quickLinks: [
     { label: 'Home', href: '/' },
     { label: 'About Us', href: '/about' },
     { label: 'Sermons', href: '/sermons' },
     { label: 'Events', href: '/events' },
-    { label: 'Connect', href: '/connect' },
+    { label: 'Ministries', href: '/connect' },
     { label: 'Give', href: '/give' },
   ],
   scripture: '"We are the clay, You are the Potter" - Isaiah 64:8',

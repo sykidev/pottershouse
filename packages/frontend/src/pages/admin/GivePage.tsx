@@ -101,7 +101,7 @@ export function AdminGivePage() {
                   <label className={field}>Account Name</label>
                   <Input value={way.accountName} onChange={(e) => updateWay(i, 'accountName', e.target.value)} />
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className={field}>Account Number</label>
                     <Input value={way.accountNumber} onChange={(e) => updateWay(i, 'accountNumber', e.target.value)} />
@@ -111,7 +111,7 @@ export function AdminGivePage() {
                     <Input value={way.currency} onChange={(e) => updateWay(i, 'currency', e.target.value)} placeholder="Naira / USD" />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className={field}>Bank</label>
                     <Input value={way.bank} onChange={(e) => updateWay(i, 'bank', e.target.value)} />

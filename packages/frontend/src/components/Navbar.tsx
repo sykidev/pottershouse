@@ -12,7 +12,7 @@ export function Navbar() {
     { href: '/about', label: 'About' },
     { href: '/sermons', label: 'Sermons' },
     { href: '/events', label: 'Events' },
-    { href: '/connect', label: 'Connect' },
+    { href: '/connect', label: 'Ministries' },
   ];
 
   // Lock body scroll when menu is open

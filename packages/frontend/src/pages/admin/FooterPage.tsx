@@ -34,6 +34,13 @@ export function AdminFooterPage() {
     );
   }
 
+  function updateSocial(i: number, key: 'label' | 'url', value: string) {
+    set(
+      'socials',
+      form.socials.map((s, idx) => (idx === i ? { ...s, [key]: value } : s))
+    );
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     save.mutate(form, { onSuccess: () => setSaved(true) });
@@ -61,19 +68,37 @@ export function AdminFooterPage() {
 
         <Card>
           <CardHeader><CardTitle>Social Links</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <label className={field}>Facebook URL</label>
-              <Input value={form.facebook} onChange={(e) => set('facebook', e.target.value)} />
-            </div>
-            <div>
-              <label className={field}>Instagram URL</label>
-              <Input value={form.instagram} onChange={(e) => set('instagram', e.target.value)} />
-            </div>
-            <div>
-              <label className={field}>YouTube URL</label>
-              <Input value={form.youtube} onChange={(e) => set('youtube', e.target.value)} />
-            </div>
+          <CardContent className="space-y-3">
+            <p className="text-xs text-gray-500">
+              Known labels get a matching icon: Instagram, Facebook, Youtube, Telegram, Mixlr.
+            </p>
+            {form.socials.map((s, i) => (
+              <div key={i} className="flex gap-2 items-center">
+                <Input
+                  className="w-40"
+                  placeholder="Label"
+                  value={s.label}
+                  onChange={(e) => updateSocial(i, 'label', e.target.value)}
+                />
+                <Input placeholder="https://…" value={s.url} onChange={(e) => updateSocial(i, 'url', e.target.value)} />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => set('socials', form.socials.filter((_, idx) => idx !== i))}
+                >
+                  Remove
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => set('socials', [...form.socials, { label: '', url: '' }])}
+            >
+              Add Social Link
+            </Button>
           </CardContent>
         </Card>
 
