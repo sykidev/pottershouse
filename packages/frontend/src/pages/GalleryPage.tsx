@@ -1,17 +1,45 @@
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/api';
 import { useContent } from '@/lib/content';
-import { GALLERY_DEFAULT, GALLERY_TAGS, GalleryContent, GalleryImage } from '@/lib/site-content';
-import { Instagram, X, Camera } from 'lucide-react';
+import { GALLERY_DEFAULT, GALLERY_TAGS, GalleryContent } from '@/lib/site-content';
+import { Instagram, X, Camera, ExternalLink } from 'lucide-react';
+
+interface InstaPost {
+  id: string;
+  caption: string;
+  permalink: string;
+  imageUrl: string;
+}
+
+interface GalleryItem {
+  url: string;
+  caption: string;
+  tag: string;
+  permalink: string;
+}
+
+const INSTAGRAM_LIMIT = 60;
 
 export function GalleryPage() {
   const page = useContent<GalleryContent>('gallery', GALLERY_DEFAULT);
   const [activeTag, setActiveTag] = useState<string>('All');
-  const [lightbox, setLightbox] = useState<GalleryImage | null>(null);
+  const [lightbox, setLightbox] = useState<GalleryItem | null>(null);
 
-  const images = page.images || [];
-  const filtered = activeTag === 'All' ? images : images.filter((img) => img.tag === activeTag);
-  // Only show tag chips that actually have photos (plus "All").
-  const usedTags = GALLERY_TAGS.filter((t) => images.some((img) => img.tag === t));
+  const { data: ig } = useQuery({
+    queryKey: ['instagram'],
+    queryFn: () => apiRequest<{ username: string; profilePictureUrl: string; posts: InstaPost[] }>('/social/instagram'),
+  });
+
+  // Combine admin-tagged photos with the live Instagram feed.
+  const manual: GalleryItem[] = (page.images || []).map((m) => ({ url: m.url, caption: m.caption, tag: m.tag, permalink: '' }));
+  const insta: GalleryItem[] = (ig?.posts || [])
+    .slice(0, INSTAGRAM_LIMIT)
+    .map((p) => ({ url: p.imageUrl, caption: p.caption, tag: 'General', permalink: p.permalink }));
+  const items = [...manual, ...insta];
+
+  const usedTags = GALLERY_TAGS.filter((t) => items.some((i) => i.tag === t));
+  const filtered = activeTag === 'All' ? items : items.filter((i) => i.tag === activeTag);
 
   return (
     <div>
@@ -37,7 +65,7 @@ export function GalleryPage() {
               className="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 backdrop-blur-sm text-white rounded-full px-6 py-3 font-medium transition-colors"
             >
               <Instagram className="w-5 h-5" />
-              Follow us on Instagram
+              {ig?.username ? `@${ig.username}` : 'Follow us on Instagram'}
             </a>
           )}
         </div>
@@ -46,14 +74,13 @@ export function GalleryPage() {
       {/* Gallery */}
       <section className="bg-gradient-to-b from-warm-white to-white py-16 min-h-[40vh]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {images.length === 0 ? (
+          {items.length === 0 ? (
             <div className="text-center py-16">
               <Camera className="w-12 h-12 text-gray-300 mx-auto mb-4" />
               <p className="text-gray-500 text-lg">Photos are coming soon. Check back shortly!</p>
             </div>
           ) : (
             <>
-              {/* Tag filters */}
               {usedTags.length > 0 && (
                 <div className="flex flex-wrap justify-center gap-2 mb-10">
                   {['All', ...usedTags].map((tag) => (
@@ -73,7 +100,6 @@ export function GalleryPage() {
                 </div>
               )}
 
-              {/* Image grid */}
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                 {filtered.map((img, i) => (
                   <button
@@ -89,7 +115,7 @@ export function GalleryPage() {
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
-                      {img.caption && <p className="text-white text-sm font-medium drop-shadow">{img.caption}</p>}
+                      {img.caption && <p className="text-white text-xs font-medium drop-shadow line-clamp-2">{img.caption}</p>}
                     </div>
                     {img.tag && img.tag !== 'General' && (
                       <span className="absolute top-2 left-2 bg-black/50 text-white text-[10px] px-2 py-0.5 rounded-full backdrop-blur-sm">
@@ -116,9 +142,19 @@ export function GalleryPage() {
           >
             <X className="w-6 h-6" />
           </button>
-          <div className="relative z-10 max-w-4xl max-h-[85vh]" onClick={(e) => e.stopPropagation()}>
-            <img src={lightbox.url} alt={lightbox.caption || 'Gallery image'} className="max-w-full max-h-[80vh] rounded-xl object-contain" />
-            {lightbox.caption && <p className="text-white/90 text-center mt-3">{lightbox.caption}</p>}
+          <div className="relative z-10 max-w-3xl max-h-[85vh] flex flex-col items-center" onClick={(e) => e.stopPropagation()}>
+            <img src={lightbox.url} alt={lightbox.caption || 'Gallery image'} className="max-w-full max-h-[70vh] rounded-xl object-contain" />
+            {lightbox.caption && <p className="text-white/90 text-center mt-3 max-w-2xl text-sm whitespace-pre-line line-clamp-4">{lightbox.caption}</p>}
+            {lightbox.permalink && (
+              <a
+                href={lightbox.permalink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-white/80 hover:text-white mt-3 text-sm"
+              >
+                <ExternalLink className="w-4 h-4" /> View on Instagram
+              </a>
+            )}
           </div>
         </div>
       )}
