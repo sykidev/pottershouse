@@ -60,8 +60,13 @@ export function Navbar() {
               ))}
             </div>
 
-            {/* Desktop Visit Us Button - Right */}
-            <div className="hidden lg:block">
+            {/* Desktop CTA Buttons - Right */}
+            <div className="hidden lg:flex items-center gap-3">
+              <Link href="/give">
+                <Button className="bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-white rounded-full px-8 shadow-md hover:shadow-xl hover:scale-105 transition-all">
+                  Give
+                </Button>
+              </Link>
               <Link href="/connect">
                 <Button className="bg-gradient-to-r from-royal-600 to-royal-700 hover:from-royal-700 hover:to-royal-800 text-white rounded-full px-8 shadow-md hover:shadow-xl hover:scale-105 transition-all">
                   Visit Us
@@ -176,7 +181,15 @@ export function Navbar() {
               transitionDelay: mobileMenuOpen ? '300ms' : '0ms',
             }}
           >
-            {/* CTA Button */}
+            {/* CTA Buttons */}
+            <Link href="/give">
+              <a
+                className="block w-full bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-white rounded-2xl py-6 text-lg font-semibold shadow-2xl transition-all backdrop-blur-sm text-center"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Give
+              </a>
+            </Link>
             <Link href="/connect">
               <a
                 className="block w-full bg-gradient-to-r from-royal-600 to-royal-700 hover:from-royal-700 hover:to-royal-800 text-white rounded-2xl py-6 text-lg font-semibold shadow-2xl hover:shadow-royal-500/50 transition-all backdrop-blur-sm text-center"

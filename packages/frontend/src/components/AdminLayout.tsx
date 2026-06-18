@@ -10,6 +10,9 @@ import {
   Users,
   FileText,
   BookOpen,
+  PanelBottom,
+  MapPin,
+  HandHeart,
   LogOut
 } from 'lucide-react';
 
@@ -32,6 +35,9 @@ export function AdminLayout({ children }: AdminLayoutProps) {
     { href: '/admin/announcements', label: 'Announcements', icon: Megaphone },
     { href: '/admin/team', label: 'Team', icon: Users },
     { href: '/admin/about-cards', label: 'About Page', icon: BookOpen },
+    { href: '/admin/visit', label: 'Visit Us Page', icon: MapPin },
+    { href: '/admin/give', label: 'Give Page', icon: HandHeart },
+    { href: '/admin/footer', label: 'Footer', icon: PanelBottom },
     { href: '/admin/content', label: 'Content', icon: FileText },
   ];
 

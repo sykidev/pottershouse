@@ -10,6 +10,7 @@ import { AboutPage } from '@/pages/AboutPage';
 import { SermonsPage } from '@/pages/SermonsPage';
 import { EventsPage } from '@/pages/EventsPage';
 import { ConnectPage } from '@/pages/ConnectPage';
+import { GivePage } from '@/pages/GivePage';
 import { LoginPage } from '@/pages/admin/LoginPage';
 import { DashboardPage } from '@/pages/admin/DashboardPage';
 import { AdminSermonsPage } from '@/pages/admin/SermonsPage';
@@ -18,6 +19,9 @@ import { AdminAnnouncementsPage } from '@/pages/admin/AnnouncementsPage';
 import { AdminTeamPage } from '@/pages/admin/TeamPage';
 import { AdminContentPage } from '@/pages/admin/ContentPage';
 import { AdminAboutCardsPage } from '@/pages/admin/AboutCardsPage';
+import { AdminFooterPage } from '@/pages/admin/FooterPage';
+import { AdminVisitPage } from '@/pages/admin/VisitPage';
+import { AdminGivePage } from '@/pages/admin/GivePage';
 
 const queryClient = new QueryClient();
 
@@ -70,6 +74,15 @@ export default function App() {
           <Route path="/admin/about-cards">
             <ProtectedRoute component={AdminAboutCardsPage} />
           </Route>
+          <Route path="/admin/footer">
+            <ProtectedRoute component={AdminFooterPage} />
+          </Route>
+          <Route path="/admin/visit">
+            <ProtectedRoute component={AdminVisitPage} />
+          </Route>
+          <Route path="/admin/give">
+            <ProtectedRoute component={AdminGivePage} />
+          </Route>
           <Route>
             <div className="min-h-screen bg-warm-white">
               <Navbar />
@@ -79,6 +92,7 @@ export default function App() {
                 <Route path="/sermons" component={SermonsPage} />
                 <Route path="/events" component={EventsPage} />
                 <Route path="/connect" component={ConnectPage} />
+                <Route path="/give" component={GivePage} />
                 <Route>
                   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                     <h1 className="text-4xl font-bold">404 - Page Not Found</h1>
