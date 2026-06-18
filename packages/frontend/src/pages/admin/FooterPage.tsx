@@ -115,29 +115,12 @@ export function AdminFooterPage() {
 
         <Card>
           <CardHeader><CardTitle>Contact</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <label className={field}>Address</label>
-              <Input value={form.address} onChange={(e) => set('address', e.target.value)} />
-            </div>
-            <div>
-              <label className={field}>Phone</label>
-              <Input value={form.phone} onChange={(e) => set('phone', e.target.value)} />
-            </div>
-            <div>
-              <label className={field}>Email</label>
-              <Input value={form.email} onChange={(e) => set('email', e.target.value)} />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className={field}>Service Label</label>
-                <Input value={form.serviceLabel} onChange={(e) => set('serviceLabel', e.target.value)} />
-              </div>
-              <div>
-                <label className={field}>Service Time</label>
-                <Input value={form.serviceTime} onChange={(e) => set('serviceTime', e.target.value)} />
-              </div>
-            </div>
+          <CardContent>
+            <p className="text-sm text-gray-600">
+              The footer's <strong>Contact Us</strong> (address, phone, email, Sunday service)
+              is managed on the <strong>Visit Us Page</strong> editor, so the footer always
+              stays in sync. Update it there.
+            </p>
           </CardContent>
         </Card>
 

@@ -43,6 +43,10 @@ export function AdminVisitPage() {
     );
   }
 
+  function updatePhone(i: number, value: string) {
+    set('phones', form.phones.map((p, idx) => (idx === i ? value : p)));
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     save.mutate(form, { onSuccess: () => setSaved(true) });
@@ -82,6 +86,32 @@ export function AdminVisitPage() {
             <div>
               <label className={field}>Postal Code</label>
               <Input value={form.postalCode} onChange={(e) => set('postalCode', e.target.value)} />
+            </div>
+            <div>
+              <label className={field}>Email</label>
+              <Input value={form.email} onChange={(e) => set('email', e.target.value)} placeholder="(optional)" />
+            </div>
+            <div>
+              <label className={field}>Phone Numbers</label>
+              <p className="text-xs text-gray-500 mb-2">These also appear in the site footer's Contact Us.</p>
+              <div className="space-y-2">
+                {form.phones.map((phone, i) => (
+                  <div key={i} className="flex gap-2 items-center">
+                    <Input value={phone} onChange={(e) => updatePhone(i, e.target.value)} />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => set('phones', form.phones.filter((_, idx) => idx !== i))}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+                <Button type="button" variant="outline" size="sm" onClick={() => set('phones', [...form.phones, ''])}>
+                  Add Phone
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>

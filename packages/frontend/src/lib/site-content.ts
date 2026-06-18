@@ -13,11 +13,6 @@ export interface FooterContent {
   instagram: string;
   youtube: string;
   quickLinks: LinkItem[];
-  address: string;
-  phone: string;
-  email: string;
-  serviceLabel: string;
-  serviceTime: string;
   scripture: string;
   copyrightName: string;
 }
@@ -37,11 +32,6 @@ export const FOOTER_DEFAULT: FooterContent = {
     { label: 'Connect', href: '/connect' },
     { label: 'Give', href: '/give' },
   ],
-  address: '123 Church Street, City, State 12345',
-  phone: '(555) 123-4567',
-  email: 'info@fncfc.org',
-  serviceLabel: 'Sunday Service',
-  serviceTime: '10:00 AM',
   scripture: '"We are the clay, You are the Potter" - Isaiah 64:8',
   copyrightName: "The Potters' Apostolic Ministries",
 };
@@ -64,6 +54,8 @@ export interface ConnectContent {
   churchName: string;
   address: string;
   postalCode: string;
+  phones: string[];
+  email: string;
   servicesHeading: string;
   services: ServiceTime[];
   ministriesHeading: string;
@@ -81,6 +73,8 @@ export const CONNECT_DEFAULT: ConnectContent = {
   churchName: "The Potter's Family Church",
   address: 'No. 8, Chikun Street, Opposite Water Board, Sabo, Kaduna, Nigeria',
   postalCode: '800242',
+  phones: ['+234 (0) 814 411 9532', '+234 (0) 703 876 6165'],
+  email: '',
   servicesHeading: 'Service Schedule',
   services: [
     { day: 'Wednesday', name: 'Special Prayer Service', time: '5:00 PM WAT' },

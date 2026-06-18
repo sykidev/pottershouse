@@ -4,14 +4,6 @@ import { useContent } from '@/lib/content';
 import { CONNECT_DEFAULT, ConnectContent } from '@/lib/site-content';
 import { Book, Music, Baby, Users, Heart, HandHeart, Phone, Mail, MapPin, Sparkles, Clock, LucideIcon } from 'lucide-react';
 
-interface ContactData {
-  address?: string;
-  phone?: string;
-  email?: string;
-  serviceTimes?: string;
-  mapUrl?: string;
-}
-
 interface TeamMember {
   id: number;
   name: string;
@@ -36,17 +28,12 @@ const PALETTE = [
 export function ConnectPage() {
   const page = useContent<ConnectContent>('connect', CONNECT_DEFAULT);
 
-  const { data: contactData } = useQuery({
-    queryKey: ['content', 'contact'],
-    queryFn: () => apiRequest<{ data: ContactData }>('/content/contact'),
-  });
-
   const { data: team } = useQuery({
     queryKey: ['team'],
     queryFn: () => apiRequest<TeamMember[]>('/team'),
   });
 
-  const contact = contactData?.data;
+  const primaryPhone = page.phones.find(Boolean);
 
   return (
     <div>
@@ -123,7 +110,23 @@ export function ConnectPage() {
                 <p className="text-white/90">{page.address}</p>
               </div>
               {page.postalCode && (
-                <p className="text-white/70 text-sm pl-9">Postal Code: {page.postalCode}</p>
+                <p className="text-white/70 text-sm pl-9 mb-2">Postal Code: {page.postalCode}</p>
+              )}
+              {page.phones.filter(Boolean).map((phone) => (
+                <div key={phone} className="flex items-center gap-3 mt-3">
+                  <Phone className="w-5 h-5 text-gold-400 flex-shrink-0" />
+                  <a href={`tel:${phone.replace(/[^+\d]/g, '')}`} className="text-white/90 hover:text-white transition-colors">
+                    {phone}
+                  </a>
+                </div>
+              ))}
+              {page.email && (
+                <div className="flex items-center gap-3 mt-3">
+                  <Mail className="w-5 h-5 text-gold-400 flex-shrink-0" />
+                  <a href={`mailto:${page.email}`} className="text-white/90 hover:text-white transition-colors">
+                    {page.email}
+                  </a>
+                </div>
               )}
             </div>
 
@@ -211,10 +214,10 @@ export function ConnectPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h2 className="text-4xl md:text-5xl font-serif font-bold mb-8 text-white drop-shadow-2xl">{page.ctaHeading}</h2>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            {contact?.phone && (
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            {primaryPhone && (
               <a
-                href={`tel:${contact.phone}`}
+                href={`tel:${primaryPhone.replace(/[^+\d]/g, '')}`}
                 className="inline-flex items-center justify-center gap-3 bg-white text-crimson px-8 py-4 rounded-2xl font-semibold hover:bg-white/90 transition-all duration-300 hover:scale-105 shadow-2xl group"
               >
                 <div className="w-10 h-10 bg-crimson/10 rounded-xl flex items-center justify-center group-hover:bg-crimson/20 transition-colors">
@@ -223,9 +226,9 @@ export function ConnectPage() {
                 Call Us
               </a>
             )}
-            {contact?.email && (
+            {page.email && (
               <a
-                href={`mailto:${contact.email}`}
+                href={`mailto:${page.email}`}
                 className="inline-flex items-center justify-center gap-3 bg-white text-crimson px-8 py-4 rounded-2xl font-semibold hover:bg-white/90 transition-all duration-300 hover:scale-105 shadow-2xl group"
               >
                 <div className="w-10 h-10 bg-crimson/10 rounded-xl flex items-center justify-center group-hover:bg-crimson/20 transition-colors">
@@ -235,23 +238,6 @@ export function ConnectPage() {
               </a>
             )}
           </div>
-
-          {contact?.address && (
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-md mx-auto border border-white/20">
-              <div className="flex items-start gap-3 mb-4">
-                <MapPin className="w-6 h-6 text-amber flex-shrink-0 mt-1" />
-                <div className="text-left">
-                  <p className="font-semibold text-white mb-2">Visit Us</p>
-                  <p className="text-white/90">{contact.address}</p>
-                </div>
-              </div>
-              {contact.serviceTimes && (
-                <p className="text-white/80 text-sm">
-                  Sunday Service: {contact.serviceTimes}
-                </p>
-              )}
-            </div>
-          )}
         </div>
       </section>
     </div>

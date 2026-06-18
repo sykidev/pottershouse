@@ -1,10 +1,13 @@
 import { Link } from 'wouter';
 import { Mail, Phone, MapPin, Clock, Facebook, Instagram, Youtube } from 'lucide-react';
 import { useContent } from '@/lib/content';
-import { FOOTER_DEFAULT, FooterContent } from '@/lib/site-content';
+import { FOOTER_DEFAULT, FooterContent, CONNECT_DEFAULT, ConnectContent } from '@/lib/site-content';
 
 export function Footer() {
   const footer = useContent<FooterContent>('footer', FOOTER_DEFAULT);
+  // Contact details are sourced from the Visit Us page so they stay in sync.
+  const connect = useContent<ConnectContent>('connect', CONNECT_DEFAULT);
+  const sunday = connect.services.find((s) => /sunday/i.test(s.day));
 
   return (
     <footer className="bg-gradient-to-b from-gray-900 to-black text-white">
@@ -67,38 +70,38 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 3 - Contact */}
+          {/* Column 3 - Contact (sourced from the Visit Us page) */}
           <div>
             <h4 className="font-bold text-lg mb-4">Contact Us</h4>
             <ul className="space-y-3 text-gray-400">
-              {footer.address && (
+              {connect.address && (
                 <li className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0" />
-                  <span>{footer.address}</span>
+                  <span>{connect.address}</span>
                 </li>
               )}
-              {footer.phone && (
-                <li className="flex items-center gap-3">
+              {connect.phones.filter(Boolean).map((phone) => (
+                <li key={phone} className="flex items-center gap-3">
                   <Phone className="w-5 h-5 flex-shrink-0" />
-                  <a href={`tel:${footer.phone}`} className="hover:text-white transition-colors">
-                    {footer.phone}
+                  <a href={`tel:${phone.replace(/[^+\d]/g, '')}`} className="hover:text-white transition-colors">
+                    {phone}
                   </a>
                 </li>
-              )}
-              {footer.email && (
+              ))}
+              {connect.email && (
                 <li className="flex items-center gap-3">
                   <Mail className="w-5 h-5 flex-shrink-0" />
-                  <a href={`mailto:${footer.email}`} className="hover:text-white transition-colors">
-                    {footer.email}
+                  <a href={`mailto:${connect.email}`} className="hover:text-white transition-colors">
+                    {connect.email}
                   </a>
                 </li>
               )}
-              {footer.serviceTime && (
+              {sunday && (
                 <li className="flex items-start gap-3">
                   <Clock className="w-5 h-5 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium text-white">{footer.serviceLabel}</p>
-                    <p className="text-sm">{footer.serviceTime}</p>
+                    <p className="font-medium text-white">{sunday.name}</p>
+                    <p className="text-sm">Sunday · {sunday.time}</p>
                   </div>
                 </li>
               )}
