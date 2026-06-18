@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 13%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 13%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 13%;
+    --primary: 276 46% 31%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 45 100% 96%;
+    --secondary-foreground: 0 0% 13%;
+    --muted: 270 20% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 45 73% 52%;
+    --accent-foreground: 0 0% 13%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 270 15% 90%;
+    --input: 270 15% 90%;
+    --ring: 276 46% 31%;
+    --radius: 1rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-warm-white text-foreground font-sans;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+@layer utilities {
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0) translateX(0);
+    }
+    25% {
+      transform: translateY(-20px) translateX(10px);
+    }
+    50% {
+      transform: translateY(-10px) translateX(-10px);
+    }
+    75% {
+      transform: translateY(-15px) translateX(5px);
+    }
+  }
+
+  @keyframes shimmer {
+    from {
+      background-position: -1000px 0;
+    }
+    to {
+      background-position: 1000px 0;
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 1s ease-out;
+  }
+
+  .animate-float {
+    animation: float linear infinite;
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+  }
+}

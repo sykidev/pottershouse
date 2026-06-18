@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+packages/*/dist/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Uploaded user content (served from disk, cached by CDN)
+uploads/
+packages/backend/uploads/
+
+# Logs
+*.log
+
+# Deployment artifacts / backups (not source)
+*.tar.gz
+*.backup
