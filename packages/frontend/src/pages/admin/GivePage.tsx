@@ -40,6 +40,14 @@ export function AdminGivePage() {
     set('ways', form.ways.map((w, idx) => (idx === i ? { ...w, [key]: value } : w)));
   }
 
+  function updatePhone(i: number, value: string) {
+    set('phones', form.phones.map((p, idx) => (idx === i ? value : p)));
+  }
+
+  function updateSocial(i: number, key: 'label' | 'url', value: string) {
+    set('social', form.social.map((s, idx) => (idx === i ? { ...s, [key]: value } : s)));
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     save.mutate(form, { onSuccess: () => setSaved(true) });
@@ -123,6 +131,75 @@ export function AdminGivePage() {
             >
               Add Account
             </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader><CardTitle>Contact / More Information</CardTitle></CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <label className={field}>Heading</label>
+              <Input value={form.contactHeading} onChange={(e) => set('contactHeading', e.target.value)} />
+            </div>
+            <div>
+              <label className={field}>Text</label>
+              <Textarea rows={2} value={form.contactText} onChange={(e) => set('contactText', e.target.value)} />
+            </div>
+
+            <div>
+              <label className={field}>Phone Numbers</label>
+              <div className="space-y-2">
+                {form.phones.map((phone, i) => (
+                  <div key={i} className="flex gap-2 items-center">
+                    <Input value={phone} onChange={(e) => updatePhone(i, e.target.value)} />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => set('phones', form.phones.filter((_, idx) => idx !== i))}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+                <Button type="button" variant="outline" size="sm" onClick={() => set('phones', [...form.phones, ''])}>
+                  Add Phone
+                </Button>
+              </div>
+            </div>
+
+            <div>
+              <label className={field}>Social Links</label>
+              <div className="space-y-2">
+                {form.social.map((s, i) => (
+                  <div key={i} className="flex gap-2 items-center">
+                    <Input
+                      className="w-40"
+                      placeholder="Label"
+                      value={s.label}
+                      onChange={(e) => updateSocial(i, 'label', e.target.value)}
+                    />
+                    <Input placeholder="https://…" value={s.url} onChange={(e) => updateSocial(i, 'url', e.target.value)} />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => set('social', form.social.filter((_, idx) => idx !== i))}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => set('social', [...form.social, { label: '', url: '' }])}
+                >
+                  Add Social Link
+                </Button>
+              </div>
+            </div>
           </CardContent>
         </Card>
 

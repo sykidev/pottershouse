@@ -1,6 +1,13 @@
 import { useContent } from '@/lib/content';
 import { GIVE_DEFAULT, GiveContent } from '@/lib/site-content';
-import { HandHeart, Building2, Landmark, Sparkles } from 'lucide-react';
+import { HandHeart, Building2, Landmark, Sparkles, Phone, Instagram, Facebook, Send, Radio, Globe, LucideIcon } from 'lucide-react';
+
+const SOCIAL_ICONS: Record<string, LucideIcon> = {
+  Instagram,
+  Facebook,
+  Telegram: Send,
+  Mixlr: Radio,
+};
 
 export function GivePage() {
   const page = useContent<GiveContent>('give', GIVE_DEFAULT);
@@ -73,6 +80,49 @@ export function GivePage() {
               );
             })}
           </div>
+
+          {/* Contact / more info */}
+          {(page.contactText || page.phones.length > 0 || page.social.length > 0) && (
+            <div className="mt-12 bg-gradient-to-br from-royal-900 to-purple-900 rounded-3xl p-8 md:p-10 text-center text-white shadow-xl">
+              <h3 className="text-2xl font-serif font-bold mb-3">{page.contactHeading}</h3>
+              <p className="text-white/85 max-w-2xl mx-auto mb-6">{page.contactText}</p>
+
+              {page.phones.length > 0 && (
+                <div className="flex flex-wrap justify-center gap-3 mb-6">
+                  {page.phones.map((phone) => (
+                    <a
+                      key={phone}
+                      href={`tel:${phone.replace(/[^+\d]/g, '')}`}
+                      className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-colors rounded-full px-5 py-2.5 font-medium"
+                    >
+                      <Phone className="w-4 h-4 text-gold-400" />
+                      {phone}
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {page.social.length > 0 && (
+                <div className="flex flex-wrap justify-center gap-3">
+                  {page.social.map((s) => {
+                    const Icon = SOCIAL_ICONS[s.label] || Globe;
+                    return (
+                      <a
+                        key={s.label}
+                        href={s.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 bg-white/10 hover:bg-gold-500 hover:text-white transition-colors rounded-full px-5 py-2.5 font-medium"
+                      >
+                        <Icon className="w-4 h-4" />
+                        {s.label}
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </section>
     </div>

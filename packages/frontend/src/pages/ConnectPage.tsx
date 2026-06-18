@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api';
 import { useContent } from '@/lib/content';
 import { CONNECT_DEFAULT, ConnectContent } from '@/lib/site-content';
-import { Book, Music, Baby, Users, Heart, HandHeart, Phone, Mail, MapPin, Sparkles, LucideIcon } from 'lucide-react';
+import { Book, Music, Baby, Users, Heart, HandHeart, Phone, Mail, MapPin, Sparkles, Clock, LucideIcon } from 'lucide-react';
 
 interface ContactData {
   address?: string;
@@ -106,6 +106,50 @@ export function ConnectPage() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* Section 2.5 - Plan Your Visit: church info + service schedule */}
+      <section className="bg-white py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-10 items-start">
+            {/* Church info */}
+            <div className="bg-gradient-to-br from-royal-900 to-purple-900 rounded-3xl p-8 text-white shadow-xl">
+              <h2 className="text-3xl font-serif font-bold mb-6">Plan Your Visit</h2>
+              <p className="text-2xl font-semibold mb-4">{page.churchName}</p>
+              <div className="flex items-start gap-3 mb-2">
+                <MapPin className="w-6 h-6 text-gold-400 flex-shrink-0 mt-1" />
+                <p className="text-white/90">{page.address}</p>
+              </div>
+              {page.postalCode && (
+                <p className="text-white/70 text-sm pl-9">Postal Code: {page.postalCode}</p>
+              )}
+            </div>
+
+            {/* Service schedule */}
+            <div>
+              <div className="flex items-center gap-2 mb-6">
+                <Clock className="w-6 h-6 text-crimson" />
+                <h2 className="text-3xl font-serif font-bold text-gray-900">{page.servicesHeading}</h2>
+              </div>
+              <div className="space-y-3">
+                {page.services.map((s, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-between gap-4 bg-warm-white rounded-2xl p-5 border border-gray-100 shadow-sm"
+                  >
+                    <div>
+                      <p className="font-bold text-gray-900">{s.day}</p>
+                      <p className="text-gray-600 text-sm">{s.name}</p>
+                    </div>
+                    <span className="inline-block bg-crimson/10 text-crimson font-semibold px-4 py-1.5 rounded-full text-sm text-right flex-shrink-0">
+                      {s.time}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>

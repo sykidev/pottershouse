@@ -52,9 +52,20 @@ export interface Ministry {
   description: string;
 }
 
+export interface ServiceTime {
+  day: string;
+  name: string;
+  time: string;
+}
+
 export interface ConnectContent {
   heroTitle: string;
   heroSubtitle: string;
+  churchName: string;
+  address: string;
+  postalCode: string;
+  servicesHeading: string;
+  services: ServiceTime[];
   ministriesHeading: string;
   ministriesSubtitle: string;
   ministries: Ministry[];
@@ -67,6 +78,16 @@ export const CONNECT_DEFAULT: ConnectContent = {
   heroTitle: 'Get Connected',
   heroSubtitle:
     'Faith grows in community. There is a place here for you — whether you are brand new or have been with us for years.',
+  churchName: "The Potter's Family Church",
+  address: 'No. 8, Chikun Street, Opposite Water Board, Sabo, Kaduna, Nigeria',
+  postalCode: '800242',
+  servicesHeading: 'Service Schedule',
+  services: [
+    { day: 'Wednesday', name: 'Special Prayer Service', time: '5:00 PM WAT' },
+    { day: 'Friday', name: "Believers' Congress", time: '5:00 PM WAT' },
+    { day: 'Second Friday of Every Month', name: 'Night of Answers', time: '10:00 PM WAT until Dawn' },
+    { day: 'Sunday', name: 'Worship and Power Service', time: '9:00 AM WAT' },
+  ],
   ministriesHeading: 'Ministries & Groups',
   ministriesSubtitle: 'Find a community where you can serve, grow, and belong',
   ministries: [
@@ -91,11 +112,20 @@ export interface GiveWay {
   swift: string;
 }
 
+export interface SocialLink {
+  label: string;
+  url: string;
+}
+
 export interface GiveContent {
   heroTitle: string;
   heroSubtitle: string;
   intro: string;
   ways: GiveWay[];
+  contactHeading: string;
+  contactText: string;
+  phones: string[];
+  social: SocialLink[];
 }
 
 export const GIVE_DEFAULT: GiveContent = {
@@ -109,5 +139,14 @@ export const GIVE_DEFAULT: GiveContent = {
     { heading: 'Building Project Account', accountName: "Potter's Apostolic Outreach Building Project", accountNumber: '8893788026', bank: 'FCMB', currency: 'Naira', swift: '' },
     { heading: 'Tithes and Offerings (Dollar)', accountName: "Potter's Apostolic Outreach", accountNumber: '0725742066', bank: 'Guaranty Trust Bank (GTB)', currency: 'USD', swift: 'GTBINGLA' },
     { heading: 'Tithes and Offerings (Naira)', accountName: "Potter's Apostolic Outreach", accountNumber: '0431522925', bank: 'Guaranty Trust Bank (GTB)', currency: 'Naira', swift: '' },
+  ],
+  contactHeading: 'Need More Information?',
+  contactText: 'For more information about giving, please contact the church office.',
+  phones: ['+234 (0) 814 411 9532', '+234 (0) 703 876 6165'],
+  social: [
+    { label: 'Instagram', url: 'https://www.instagram.com/thepottersapostolicministries/' },
+    { label: 'Facebook', url: 'https://www.facebook.com/pottersapostolicministries/' },
+    { label: 'Telegram', url: 'https://t.me/thepottersapostolic' },
+    { label: 'Mixlr', url: 'http://thepottersglobal.mixlr.com' },
   ],
 };

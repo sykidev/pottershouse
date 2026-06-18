@@ -36,6 +36,13 @@ export function AdminVisitPage() {
     );
   }
 
+  function updateService(i: number, key: 'day' | 'name' | 'time', value: string) {
+    set(
+      'services',
+      form.services.map((s, idx) => (idx === i ? { ...s, [key]: value } : s))
+    );
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     save.mutate(form, { onSuccess: () => setSaved(true) });
@@ -58,6 +65,71 @@ export function AdminVisitPage() {
               <label className={field}>Subtitle</label>
               <Textarea rows={2} value={form.heroSubtitle} onChange={(e) => set('heroSubtitle', e.target.value)} />
             </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader><CardTitle>Church Information</CardTitle></CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <label className={field}>Church Name</label>
+              <Input value={form.churchName} onChange={(e) => set('churchName', e.target.value)} />
+            </div>
+            <div>
+              <label className={field}>Address</label>
+              <Textarea rows={2} value={form.address} onChange={(e) => set('address', e.target.value)} />
+            </div>
+            <div>
+              <label className={field}>Postal Code</label>
+              <Input value={form.postalCode} onChange={(e) => set('postalCode', e.target.value)} />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader><CardTitle>Service Schedule</CardTitle></CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <label className={field}>Section Heading</label>
+              <Input value={form.servicesHeading} onChange={(e) => set('servicesHeading', e.target.value)} />
+            </div>
+            {form.services.map((s, i) => (
+              <div key={i} className="border rounded-lg p-4 space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-semibold text-gray-500">Service {i + 1}</span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => set('services', form.services.filter((_, idx) => idx !== i))}
+                  >
+                    Remove
+                  </Button>
+                </div>
+                <div>
+                  <label className={field}>Day</label>
+                  <Input value={s.day} onChange={(e) => updateService(i, 'day', e.target.value)} placeholder="e.g., Sunday" />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className={field}>Service Name</label>
+                    <Input value={s.name} onChange={(e) => updateService(i, 'name', e.target.value)} />
+                  </div>
+                  <div>
+                    <label className={field}>Time</label>
+                    <Input value={s.time} onChange={(e) => updateService(i, 'time', e.target.value)} placeholder="e.g., 9:00 AM WAT" />
+                  </div>
+                </div>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => set('services', [...form.services, { day: '', name: '', time: '' }])}
+            >
+              Add Service
+            </Button>
           </CardContent>
         </Card>
 
