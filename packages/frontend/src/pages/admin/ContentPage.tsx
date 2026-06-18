@@ -37,6 +37,9 @@ export function AdminContentPage() {
       queryClient.invalidateQueries({ queryKey: ['content', selectedSection] });
       alert('Content updated successfully!');
     },
+    onError: (error) => {
+      alert((error as Error).message || 'Save failed. Please try again.');
+    },
   });
 
   function handleSubmit(e: React.FormEvent) {

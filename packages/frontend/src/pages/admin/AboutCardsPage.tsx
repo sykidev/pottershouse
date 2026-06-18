@@ -216,13 +216,26 @@ export function AdminAboutCardsPage() {
               </div>
 
               <div className="flex gap-2">
-                <Button type="submit">
-                  {editingId ? 'Update' : 'Create'}
+                <Button
+                  type="submit"
+                  disabled={createMutation.isPending || updateMutation.isPending}
+                >
+                  {createMutation.isPending || updateMutation.isPending
+                    ? 'Saving…'
+                    : editingId
+                    ? 'Update'
+                    : 'Create'}
                 </Button>
                 <Button type="button" variant="outline" onClick={resetForm}>
                   Cancel
                 </Button>
               </div>
+              {createMutation.error || updateMutation.error ? (
+                <p className="text-sm text-red-600">
+                  {((createMutation.error || updateMutation.error) as Error).message ||
+                    'Save failed. Please try again.'}
+                </p>
+              ) : null}
             </form>
           </CardContent>
         </Card>

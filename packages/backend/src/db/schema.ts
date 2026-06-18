@@ -69,7 +69,7 @@ const imageUrlSchema = z
   .refine((v) => v.startsWith('/') || /^https?:\/\//i.test(v), {
     message: 'Must be a URL or an uploaded image path',
   })
-  .optional();
+  .nullish();
 
 export const insertSermonSchema = createInsertSchema(sermons, {
   title: z.string().min(1),
@@ -122,8 +122,8 @@ export const insertAboutCardSchema = createInsertSchema(aboutCards, {
   title: z.string().min(1),
   shortDescription: z.string().min(1),
   fullDescription: z.string().min(1),
-  year: z.string().optional(),
-  icon: z.string().optional(),
+  year: z.string().nullish(),
+  icon: z.string().nullish(),
   orderIndex: z.number().int().optional(),
 });
 
