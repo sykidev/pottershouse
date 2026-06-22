@@ -50,6 +50,23 @@ export const content = pgTable('content', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
+// Gallery images are the single source of truth for the public gallery and the
+// home-page Instagram strip. Images are synced from Instagram (via FeedFramer)
+// or uploaded manually in the admin, then must be approved before going live.
+export const galleryImages = pgTable('gallery_images', {
+  id: serial('id').primaryKey(),
+  source: text('source').notNull().default('instagram'), // 'instagram' | 'manual'
+  sourceId: text('source_id').unique(), // FeedFramer/Instagram post id; null for manual uploads
+  imageUrl: text('image_url').notNull(),
+  permalink: text('permalink'), // link back to the original Instagram post
+  caption: text('caption').notNull().default(''),
+  tag: text('tag').notNull().default('General'),
+  mediaType: text('media_type'), // IMAGE | VIDEO | CAROUSEL_ALBUM
+  status: text('status').notNull().default('pending'), // 'pending' | 'approved' | 'rejected'
+  postedAt: timestamp('posted_at'), // original Instagram timestamp
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
 export const aboutCards = pgTable('about_cards', {
   id: serial('id').primaryKey(),
   type: text('type').notNull(), // 'story' | 'vision' | 'mission'
@@ -116,6 +133,30 @@ export const insertContentSchema = createInsertSchema(content, {
 });
 
 export const selectContentSchema = createSelectSchema(content);
+
+export const insertGalleryImageSchema = createInsertSchema(galleryImages, {
+  source: z.enum(['instagram', 'manual']).optional(),
+  sourceId: z.string().nullish(),
+  imageUrl: z
+    .string()
+    .refine((v) => v.startsWith('/') || /^https?:\/\//i.test(v), {
+      message: 'Must be a URL or an uploaded image path',
+    }),
+  permalink: z.string().nullish(),
+  caption: z.string().optional(),
+  tag: z.string().optional(),
+  mediaType: z.string().nullish(),
+  status: z.enum(['pending', 'approved', 'rejected']).optional(),
+});
+
+export const selectGalleryImageSchema = createSelectSchema(galleryImages);
+
+// Fields the admin may patch on an existing gallery image.
+export const updateGalleryImageSchema = z.object({
+  caption: z.string().optional(),
+  tag: z.string().optional(),
+  status: z.enum(['pending', 'approved', 'rejected']).optional(),
+});
 
 export const insertAboutCardSchema = createInsertSchema(aboutCards, {
   type: z.enum(['story', 'vision', 'mission']),

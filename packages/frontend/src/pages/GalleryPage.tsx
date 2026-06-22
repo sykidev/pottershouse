@@ -5,11 +5,12 @@ import { useContent } from '@/lib/content';
 import { GALLERY_DEFAULT, GALLERY_TAGS, GalleryContent } from '@/lib/site-content';
 import { Instagram, X, Camera, ExternalLink } from 'lucide-react';
 
-interface InstaPost {
-  id: string;
-  caption: string;
-  permalink: string;
+interface GalleryRow {
+  id: number;
   imageUrl: string;
+  caption: string;
+  tag: string;
+  permalink: string | null;
 }
 
 interface GalleryItem {
@@ -19,24 +20,23 @@ interface GalleryItem {
   permalink: string;
 }
 
-const INSTAGRAM_LIMIT = 60;
-
 export function GalleryPage() {
-  const page = useContent<GalleryContent>('gallery', GALLERY_DEFAULT);
+  const page = useContent<GalleryContent & { igUsername?: string }>('gallery', GALLERY_DEFAULT);
   const [activeTag, setActiveTag] = useState<string>('All');
   const [lightbox, setLightbox] = useState<GalleryItem | null>(null);
 
-  const { data: ig } = useQuery({
-    queryKey: ['instagram'],
-    queryFn: () => apiRequest<{ username: string; profilePictureUrl: string; posts: InstaPost[] }>('/social/instagram'),
+  // Approved images come straight from our DB — no live Instagram call on visit.
+  const { data: rows } = useQuery({
+    queryKey: ['gallery'],
+    queryFn: () => apiRequest<GalleryRow[]>('/gallery'),
   });
 
-  // Combine admin-tagged photos with the live Instagram feed.
-  const manual: GalleryItem[] = (page.images || []).map((m) => ({ url: m.url, caption: m.caption, tag: m.tag, permalink: '' }));
-  const insta: GalleryItem[] = (ig?.posts || [])
-    .slice(0, INSTAGRAM_LIMIT)
-    .map((p) => ({ url: p.imageUrl, caption: p.caption, tag: 'General', permalink: p.permalink }));
-  const items = [...manual, ...insta];
+  const items: GalleryItem[] = (rows || []).map((r) => ({
+    url: r.imageUrl,
+    caption: r.caption,
+    tag: r.tag,
+    permalink: r.permalink || '',
+  }));
 
   const usedTags = GALLERY_TAGS.filter((t) => items.some((i) => i.tag === t));
   const filtered = activeTag === 'All' ? items : items.filter((i) => i.tag === activeTag);
@@ -65,7 +65,7 @@ export function GalleryPage() {
               className="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 backdrop-blur-sm text-white rounded-full px-6 py-3 font-medium transition-colors"
             >
               <Instagram className="w-5 h-5" />
-              {ig?.username ? `@${ig.username}` : 'Follow us on Instagram'}
+              {page.igUsername ? `@${page.igUsername}` : 'Follow us on Instagram'}
             </a>
           )}
         </div>

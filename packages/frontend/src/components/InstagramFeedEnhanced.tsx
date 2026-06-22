@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Instagram, ExternalLink, Heart, MessageCircle } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { apiRequest } from '@/lib/api';
 // Skeleton loader handled inline
 
 interface InstagramPost {
@@ -17,82 +18,43 @@ interface InstagramPost {
 
 interface InstagramFeedData {
   username: string;
+  profileUrl: string;
   posts: InstagramPost[];
 }
 
+interface GalleryRow {
+  id: number;
+  imageUrl: string;
+  caption: string;
+  permalink: string | null;
+  mediaType: string | null;
+  status: string;
+}
+
+const HOME_FEED_LIMIT = 12;
+
+// Pulls approved gallery images from our own DB (synced from Instagram in the
+// admin). No live Instagram/FeedFramer call happens on a page visit.
 async function fetchInstagramFeed(): Promise<InstagramFeedData> {
-  // In production, this would call your backend endpoint that fetches from Instagram API
-  // For now, return mock data that looks like real Instagram response
-  // Backend route: GET /api/social/instagram
+  type GalleryContentResp = { data: { igUsername?: string; instagramUrl?: string } };
+  const [rows, content] = await Promise.all([
+    apiRequest<GalleryRow[]>('/gallery'),
+    apiRequest<GalleryContentResp>('/content/gallery').catch((): GalleryContentResp => ({ data: {} })),
+  ]);
 
-  // Simulated API call
-  await new Promise(resolve => setTimeout(resolve, 500));
+  const username = content.data?.igUsername || 'thepottersapostolicministries';
+  const profileUrl = content.data?.instagramUrl || `https://instagram.com/${username}`;
 
-  return {
-    username: 'thepottersapostolic',
-    posts: [
-      {
-        id: '1',
-        media_url: 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=400&h=400&fit=crop',
-        media_type: 'IMAGE',
-        caption: 'Sunday worship was powerful! Join us next week as we dive deeper into God\'s Word. #SundayService #Worship',
-        permalink: 'https://instagram.com/p/example1',
-        timestamp: '2024-06-10T10:00:00Z',
-        like_count: 234,
-        comments_count: 18,
-      },
-      {
-        id: '2',
-        media_url: 'https://images.unsplash.com/photo-1529070538774-1843cb3265df?w=400&h=400&fit=crop',
-        media_type: 'IMAGE',
-        caption: 'Youth retreat was amazing! So many lives transformed. #YouthMinistry #Transformation',
-        permalink: 'https://instagram.com/p/example2',
-        timestamp: '2024-06-08T14:30:00Z',
-        like_count: 189,
-        comments_count: 12,
-      },
-      {
-        id: '3',
-        media_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
-        media_type: 'IMAGE',
-        caption: 'Community outreach serving our neighbors with the love of Christ. #CommunityService #LoveInAction',
-        permalink: 'https://instagram.com/p/example3',
-        timestamp: '2024-06-06T16:00:00Z',
-        like_count: 312,
-        comments_count: 24,
-      },
-      {
-        id: '4',
-        media_url: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&h=400&fit=crop',
-        media_type: 'IMAGE',
-        caption: 'Bible study tonight! Diving deep into Romans. All are welcome! #BibleStudy #Community',
-        permalink: 'https://instagram.com/p/example4',
-        timestamp: '2024-06-05T18:00:00Z',
-        like_count: 156,
-        comments_count: 9,
-      },
-      {
-        id: '5',
-        media_url: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=400&h=400&fit=crop',
-        media_type: 'IMAGE',
-        caption: 'Worship night filled with His presence. Come experience the power of praise! #WorshipNight #Praise',
-        permalink: 'https://instagram.com/p/example5',
-        timestamp: '2024-06-03T19:00:00Z',
-        like_count: 267,
-        comments_count: 15,
-      },
-      {
-        id: '6',
-        media_url: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=400&h=400&fit=crop',
-        media_type: 'IMAGE',
-        caption: 'Join us this Sunday for a life-changing message! Service starts at 10 AM. #ChurchLife #SundayMorning',
-        permalink: 'https://instagram.com/p/example6',
-        timestamp: '2024-06-01T09:00:00Z',
-        like_count: 198,
-        comments_count: 11,
-      },
-    ],
-  };
+  const posts: InstagramPost[] = rows.slice(0, HOME_FEED_LIMIT).map((r) => ({
+    id: String(r.id),
+    media_url: r.imageUrl,
+    media_type: (r.mediaType as InstagramPost['media_type']) || 'IMAGE',
+    caption: r.caption,
+    permalink: r.permalink || profileUrl,
+    timestamp: '',
+  }));
+
+  return { username, profileUrl, posts };
 }
 
 function AnimatedPost({ post, delay }: { post: InstagramPost; delay: number }) {
@@ -220,7 +182,7 @@ export function InstagramFeedEnhanced() {
           </p>
           {feedData && (
             <a
-              href={`https://instagram.com/${feedData.username}`}
+              href={feedData.profileUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-clay-700 hover:text-clay-900 font-semibold group"
@@ -245,19 +207,23 @@ export function InstagramFeedEnhanced() {
           <div className="text-center py-12">
             <p className="text-gray-500">Unable to load Instagram feed. Please visit us on Instagram!</p>
           </div>
-        ) : feedData ? (
+        ) : feedData && feedData.posts.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {feedData.posts.map((post, index) => (
               <AnimatedPost key={post.id} post={post} delay={index * 50} />
             ))}
           </div>
-        ) : null}
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-gray-500">Follow us on Instagram for the latest photos!</p>
+          </div>
+        )}
 
         {/* Follow Button */}
         {feedData && (
           <div className="text-center mt-12">
             <a
-              href={`https://instagram.com/${feedData.username}`}
+              href={feedData.profileUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 via-pink-600 to-amber-500 hover:shadow-2xl text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:scale-105"

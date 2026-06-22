@@ -14,6 +14,7 @@ import statsRoutes from './routes/stats.js';
 import youtubeRoutes from './routes/youtube.js';
 import storageRoutes, { UPLOAD_DIR } from './routes/storage.js';
 import instagramRoutes from './routes/instagram.js';
+import galleryRoutes from './routes/gallery.js';
 import aboutCardsRoutes from './routes/about-cards.js';
 
 const logger = pino({
@@ -90,6 +91,7 @@ app.use('/uploads', express.static(UPLOAD_DIR, {
   maxAge: '30d',
 }));
 app.use('/api/social', instagramRoutes);
+app.use('/api/gallery', galleryRoutes);
 app.use('/api/about-cards', aboutCardsRoutes);
 
 app.get('/health', (req, res) => {

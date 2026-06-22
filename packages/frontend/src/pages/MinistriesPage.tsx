@@ -1,17 +1,7 @@
 import { Link } from 'wouter';
-import { useQuery } from '@tanstack/react-query';
-import { apiRequest } from '@/lib/api';
 import { useContent } from '@/lib/content';
 import { MINISTRIES_DEFAULT, MinistriesContent, ministrySlug } from '@/lib/site-content';
 import { Book, Music, Baby, Users, Heart, HandHeart, Sparkles, ArrowRight, LucideIcon } from 'lucide-react';
-
-interface TeamMember {
-  id: number;
-  name: string;
-  role: string;
-  bio: string;
-  imageUrl: string | null;
-}
 
 // Icon names an admin can type for a ministry card.
 const ICONS: Record<string, LucideIcon> = { Book, Music, Baby, Users, Heart, HandHeart, Sparkles };
@@ -28,11 +18,6 @@ const PALETTE = [
 
 export function MinistriesPage() {
   const page = useContent<MinistriesContent>('ministries', MINISTRIES_DEFAULT);
-
-  const { data: team } = useQuery({
-    queryKey: ['team'],
-    queryFn: () => apiRequest<TeamMember[]>('/team'),
-  });
 
   return (
     <div>
@@ -95,51 +80,6 @@ export function MinistriesPage() {
                 </Link>
               );
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* Meet Our Team */}
-      <section className="bg-gradient-to-b from-white to-gray-50 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-gray-900 mb-3">{page.teamHeading}</h2>
-            <p className="text-gray-600">{page.teamSubtitle}</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {team?.map((member) => (
-              <div
-                key={member.id}
-                className="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-crimson/20"
-              >
-                <div className="relative h-64 overflow-hidden bg-gradient-to-br from-crimson to-purple-600">
-                  {member.imageUrl ? (
-                    <img
-                      src={member.imageUrl}
-                      alt={member.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-crimson to-purple-600 flex items-center justify-center">
-                      <span className="text-6xl font-serif font-bold text-white drop-shadow-2xl">
-                        {member.name.charAt(0)}
-                      </span>
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-2xl font-serif font-bold text-gray-900 mb-2 group-hover:text-crimson transition-colors">
-                    {member.name}
-                  </h3>
-                  <div className="inline-block bg-gradient-to-r from-crimson to-amber text-white text-sm font-semibold px-4 py-1.5 rounded-full mb-4">
-                    {member.role}
-                  </div>
-                  <p className="text-gray-700 leading-relaxed">{member.bio}</p>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
