@@ -16,6 +16,7 @@ import storageRoutes, { UPLOAD_DIR } from './routes/storage.js';
 import instagramRoutes from './routes/instagram.js';
 import galleryRoutes from './routes/gallery.js';
 import aboutCardsRoutes from './routes/about-cards.js';
+import { startYoutubeSyncJob } from './jobs/youtube-sync.js';
 
 const logger = pino({
   transport: {
@@ -100,4 +101,6 @@ app.get('/health', (req, res) => {
 
 app.listen(PORT, () => {
   logger.info(`Server running on port ${PORT}`);
+  // Poll YouTube for newly-completed livestreams and import them as sermons.
+  startYoutubeSyncJob(logger);
 });

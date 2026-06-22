@@ -78,28 +78,34 @@ async function fetchCompletedBroadcasts(): Promise<YtVideo[]> {
 }
 
 // Import completed live broadcasts into the sermons table (skips already-imported).
+// Shared by the admin "Sync from YouTube" button and the scheduled 6-hour job.
+export async function syncCompletedBroadcasts(): Promise<{ imported: number; found: number }> {
+  const videos = await fetchCompletedBroadcasts();
+  const existing = await db.select({ videoUrl: sermons.videoUrl }).from(sermons);
+  const existingUrls = new Set(existing.map((e) => e.videoUrl));
+
+  let imported = 0;
+  for (const v of videos) {
+    const videoUrl = `https://www.youtube.com/watch?v=${v.videoId}`;
+    if (existingUrls.has(videoUrl)) continue;
+    await db.insert(sermons).values({
+      title: v.title,
+      speaker: v.channelTitle || "The Potters' Apostolic Ministries",
+      date: v.published ? v.published.slice(0, 10) : new Date().toISOString().slice(0, 10),
+      description: v.description || v.title,
+      videoUrl,
+      imageUrl: v.thumbnail || null,
+    });
+    imported++;
+  }
+
+  return { imported, found: videos.length };
+}
+
 router.post('/sync-youtube', requireAuth, async (req, res) => {
   try {
-    const videos = await fetchCompletedBroadcasts();
-    const existing = await db.select({ videoUrl: sermons.videoUrl }).from(sermons);
-    const existingUrls = new Set(existing.map((e) => e.videoUrl));
-
-    let imported = 0;
-    for (const v of videos) {
-      const videoUrl = `https://www.youtube.com/watch?v=${v.videoId}`;
-      if (existingUrls.has(videoUrl)) continue;
-      await db.insert(sermons).values({
-        title: v.title,
-        speaker: v.channelTitle || "The Potters' Apostolic Ministries",
-        date: v.published ? v.published.slice(0, 10) : new Date().toISOString().slice(0, 10),
-        description: v.description || v.title,
-        videoUrl,
-        imageUrl: v.thumbnail || null,
-      });
-      imported++;
-    }
-
-    res.json({ imported, found: videos.length });
+    const result = await syncCompletedBroadcasts();
+    res.json(result);
   } catch (error) {
     res.status(500).json({ error: error instanceof Error ? error.message : 'Sync failed' });
   }
