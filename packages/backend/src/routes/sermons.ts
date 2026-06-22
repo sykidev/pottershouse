@@ -15,6 +15,19 @@ interface YtVideo {
   channelTitle: string;
 }
 
+// YouTube's API returns snippet text with HTML entities (e.g. FATHER&#39;S DAY),
+// so decode them before storing or they render literally on the sermon page.
+function decodeEntities(text: string): string {
+  return text
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
+}
+
 // Fetch a channel's COMPLETED live broadcasts via YouTube Data API v3.
 // Requires env YoutubeApiKey + YoutubeChannelId. Uses only an API key (public data).
 async function fetchCompletedBroadcasts(): Promise<YtVideo[]> {
@@ -47,15 +60,15 @@ async function fetchCompletedBroadcasts(): Promise<YtVideo[]> {
       if (!item.id?.videoId) continue;
       videos.push({
         videoId: item.id.videoId,
-        title: item.snippet?.title || 'Untitled',
-        description: item.snippet?.description || '',
+        title: decodeEntities(item.snippet?.title || 'Untitled'),
+        description: decodeEntities(item.snippet?.description || ''),
         published: item.snippet?.publishedAt || '',
         thumbnail:
           item.snippet?.thumbnails?.high?.url ||
           item.snippet?.thumbnails?.medium?.url ||
           item.snippet?.thumbnails?.default?.url ||
           '',
-        channelTitle: item.snippet?.channelTitle || '',
+        channelTitle: decodeEntities(item.snippet?.channelTitle || ''),
       });
     }
     pageToken = data.nextPageToken || '';
