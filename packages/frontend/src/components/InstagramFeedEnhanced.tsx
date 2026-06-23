@@ -31,7 +31,7 @@ interface GalleryRow {
   status: string;
 }
 
-const HOME_FEED_LIMIT = 12;
+const HOME_FEED_LIMIT = 6;
 
 // Pulls approved gallery images from our own DB (synced from Instagram in the
 // admin). No live Instagram/FeedFramer call happens on a page visit.
