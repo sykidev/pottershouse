@@ -42,7 +42,8 @@ export function GalleryPage() {
     permalink: r.permalink || '',
   }));
 
-  const usedTags = GALLERY_TAGS.filter((t) => items.some((i) => i.tag === t));
+  // 'General' is the catch-all tag — it's identical to the "All" filter, so omit it here.
+  const usedTags = GALLERY_TAGS.filter((t) => t !== 'General' && items.some((i) => i.tag === t));
   const filtered = activeTag === 'All' ? items : items.filter((i) => i.tag === activeTag);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);

@@ -47,7 +47,8 @@ export function SermonsPage() {
   const youtubeChannelId = contentData?.data?.youtubeChannelId;
 
   // Tag filtering reuses the gallery tag set; only show tags that have sermons.
-  const usedTags = GALLERY_TAGS.filter((t) => sermons?.some((s) => s.tag === t));
+  // 'General' is the catch-all tag — identical to the "All" filter, so omit it here.
+  const usedTags = GALLERY_TAGS.filter((t) => t !== 'General' && sermons?.some((s) => s.tag === t));
   const filtered = activeTag === 'All' ? sermons ?? [] : (sermons ?? []).filter((s) => s.tag === activeTag);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
