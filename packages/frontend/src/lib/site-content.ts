@@ -180,6 +180,21 @@ export const GALLERY_TAGS = [
   'School of Basic Leadership and Discipleship (SBLD)',
   "The Potter's School of Ministry and Mentorship (TPSOMM)",
   'Crusade and Outreach Ministry',
+  'Sunday Service',
+  'Believers Congress Meeting',
+  'Night of Answer',
+  'Crusade and Outreaches',
+];
+
+// Sermon filter categories — independent of the gallery/ministry tags.
+// 'General' is the catch-all default (matches the DB default) and is hidden
+// from the public filter row, where it's identical to "All".
+export const SERMON_TAGS = [
+  'General',
+  'Sunday Service',
+  'Believers Congress Meeting',
+  'Night of Answer',
+  'Crusade and Outreaches',
 ];
 
 export interface GalleryImage {

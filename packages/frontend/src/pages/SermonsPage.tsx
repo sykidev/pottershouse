@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api';
-import { GALLERY_TAGS } from '@/lib/site-content';
+import { SERMON_TAGS } from '@/lib/site-content';
 import { Youtube, Play, X } from 'lucide-react';
 import { SkeletonGrid } from '@/components/SkeletonLoader';
 import { Pagination } from '@/components/Pagination';
@@ -46,9 +46,9 @@ export function SermonsPage() {
 
   const youtubeChannelId = contentData?.data?.youtubeChannelId;
 
-  // Tag filtering reuses the gallery tag set; only show tags that have sermons.
+  // Only show tags that actually have sermons.
   // 'General' is the catch-all tag — identical to the "All" filter, so omit it here.
-  const usedTags = GALLERY_TAGS.filter((t) => t !== 'General' && sermons?.some((s) => s.tag === t));
+  const usedTags = SERMON_TAGS.filter((t) => t !== 'General' && sermons?.some((s) => s.tag === t));
   const filtered = activeTag === 'All' ? sermons ?? [] : (sermons ?? []).filter((s) => s.tag === activeTag);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);

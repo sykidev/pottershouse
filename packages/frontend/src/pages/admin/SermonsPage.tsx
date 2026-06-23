@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api';
-import { GALLERY_TAGS } from '@/lib/site-content';
+import { SERMON_TAGS } from '@/lib/site-content';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -279,7 +279,7 @@ export function AdminSermonsPage() {
                   value={sermon.tag}
                   onChange={(e) => patchMutation.mutate({ id: sermon.id, data: { tag: e.target.value } })}
                 >
-                  {GALLERY_TAGS.map((t) => (
+                  {SERMON_TAGS.map((t) => (
                     <option key={t} value={t}>
                       {t}
                     </option>
