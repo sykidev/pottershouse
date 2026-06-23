@@ -4,6 +4,9 @@ import { apiRequest } from '@/lib/api';
 import { useContent } from '@/lib/content';
 import { GALLERY_DEFAULT, GALLERY_TAGS, GalleryContent } from '@/lib/site-content';
 import { Instagram, X, Camera, ExternalLink } from 'lucide-react';
+import { Pagination } from '@/components/Pagination';
+
+const PAGE_SIZE = 12;
 
 interface GalleryRow {
   id: number;
@@ -24,6 +27,7 @@ export function GalleryPage() {
   const page = useContent<GalleryContent & { igUsername?: string }>('gallery', GALLERY_DEFAULT);
   const [activeTag, setActiveTag] = useState<string>('All');
   const [lightbox, setLightbox] = useState<GalleryItem | null>(null);
+  const [pageNum, setPageNum] = useState(1);
 
   // Approved images come straight from our DB — no live Instagram call on visit.
   const { data: rows } = useQuery({
@@ -40,6 +44,10 @@ export function GalleryPage() {
 
   const usedTags = GALLERY_TAGS.filter((t) => items.some((i) => i.tag === t));
   const filtered = activeTag === 'All' ? items : items.filter((i) => i.tag === activeTag);
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const currentPage = Math.min(pageNum, Math.max(1, totalPages));
+  const paged = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   return (
     <div>
@@ -87,7 +95,7 @@ export function GalleryPage() {
                     <button
                       key={tag}
                       type="button"
-                      onClick={() => setActiveTag(tag)}
+                      onClick={() => { setActiveTag(tag); setPageNum(1); }}
                       className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                         activeTag === tag
                           ? 'bg-crimson text-white shadow-md'
@@ -101,7 +109,7 @@ export function GalleryPage() {
               )}
 
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-                {filtered.map((img, i) => (
+                {paged.map((img, i) => (
                   <button
                     key={i}
                     type="button"
@@ -125,6 +133,7 @@ export function GalleryPage() {
                   </button>
                 ))}
               </div>
+              <Pagination page={currentPage} totalPages={totalPages} onChange={setPageNum} />
             </>
           )}
         </div>

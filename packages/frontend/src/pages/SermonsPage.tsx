@@ -4,6 +4,9 @@ import { apiRequest } from '@/lib/api';
 import { GALLERY_TAGS } from '@/lib/site-content';
 import { Youtube, Play, X } from 'lucide-react';
 import { SkeletonGrid } from '@/components/SkeletonLoader';
+import { Pagination } from '@/components/Pagination';
+
+const PAGE_SIZE = 6;
 
 interface Sermon {
   id: number;
@@ -29,6 +32,7 @@ function getYouTubeId(url: string): string | null {
 export function SermonsPage() {
   const [playing, setPlaying] = useState<Sermon | null>(null);
   const [activeTag, setActiveTag] = useState<string>('All');
+  const [page, setPage] = useState(1);
 
   const { data: sermons, isLoading } = useQuery({
     queryKey: ['sermons'],
@@ -45,6 +49,10 @@ export function SermonsPage() {
   // Tag filtering reuses the gallery tag set; only show tags that have sermons.
   const usedTags = GALLERY_TAGS.filter((t) => sermons?.some((s) => s.tag === t));
   const filtered = activeTag === 'All' ? sermons ?? [] : (sermons ?? []).filter((s) => s.tag === activeTag);
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const currentPage = Math.min(page, Math.max(1, totalPages));
+  const paged = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   if (isLoading) {
     return (
@@ -118,7 +126,7 @@ export function SermonsPage() {
                     <button
                       key={t}
                       type="button"
-                      onClick={() => setActiveTag(t)}
+                      onClick={() => { setActiveTag(t); setPage(1); }}
                       className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                         activeTag === t
                           ? 'bg-crimson text-white shadow'
@@ -131,7 +139,7 @@ export function SermonsPage() {
                 </div>
               )}
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filtered.map((sermon) => (
+              {paged.map((sermon) => (
                 <div
                   key={sermon.id}
                   className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col"
@@ -185,6 +193,7 @@ export function SermonsPage() {
               {filtered.length === 0 && (
                 <p className="text-center text-gray-500 py-12">No sermons in this category yet.</p>
               )}
+              <Pagination page={currentPage} totalPages={totalPages} onChange={setPage} />
             </>
           )}
 

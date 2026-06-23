@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import { Link } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api';
 import { Calendar, Clock, MapPin, Sparkles } from 'lucide-react';
 import { SkeletonGrid } from '@/components/SkeletonLoader';
+import { Pagination } from '@/components/Pagination';
+
+const PAST_PAGE_SIZE = 5;
 
 interface Event {
   id: number;
@@ -34,6 +38,7 @@ function getEventStatus(dateString: string) {
 }
 
 export function EventsPage() {
+  const [pastPage, setPastPage] = useState(1);
   const { data: events, isLoading } = useQuery({
     queryKey: ['events'],
     queryFn: () => apiRequest<Event[]>('/events'),
@@ -62,6 +67,10 @@ export function EventsPage() {
   const now = new Date();
   const upcomingEvents = events?.filter(e => new Date(e.date) >= now) || [];
   const pastEvents = events?.filter(e => new Date(e.date) < now) || [];
+
+  const pastTotalPages = Math.ceil(pastEvents.length / PAST_PAGE_SIZE);
+  const pastCurrentPage = Math.min(pastPage, Math.max(1, pastTotalPages));
+  const pagedPastEvents = pastEvents.slice((pastCurrentPage - 1) * PAST_PAGE_SIZE, pastCurrentPage * PAST_PAGE_SIZE);
 
   return (
     <div>
@@ -178,7 +187,7 @@ export function EventsPage() {
             </div>
 
             <div className="space-y-6">
-              {pastEvents.map((event) => (
+              {pagedPastEvents.map((event) => (
                 <Link key={event.id} href={`/events/${event.id}`}>
                 <a
                   className="block bg-white/60 backdrop-blur-sm rounded-3xl border-2 border-gray-200 p-8 opacity-75 hover:opacity-100 transition-opacity duration-300"
@@ -214,6 +223,7 @@ export function EventsPage() {
                 </Link>
               ))}
             </div>
+            <Pagination page={pastCurrentPage} totalPages={pastTotalPages} onChange={setPastPage} />
           </div>
         </section>
       )}
