@@ -73,7 +73,7 @@ export function VisitPage() {
                     key={i}
                     className="flex items-center justify-between gap-4 bg-warm-white rounded-2xl p-5 border border-gray-100 shadow-sm"
                   >
-                    <div>
+                    <div className="min-w-0">
                       <p className="font-bold text-gray-900">{s.day}</p>
                       <p className="text-gray-600 text-sm">{s.name}</p>
                     </div>

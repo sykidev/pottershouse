@@ -65,7 +65,7 @@ export function SermonsPage() {
                 <Youtube className="w-8 h-8" />
               </div>
             </div>
-            <h1 className="text-5xl font-serif font-bold mb-4">Sermons</h1>
+            <h1 className="text-4xl sm:text-5xl font-serif font-bold mb-4">Sermons</h1>
             <p className="text-lg text-white/90">Watch and grow in faith through our latest messages.</p>
           </div>
         </section>

@@ -94,7 +94,7 @@ export function EventsPage() {
               <Calendar className="w-8 h-8 text-amber" />
             </div>
           </div>
-          <h1 className="text-5xl md:text-6xl font-serif font-bold text-white mb-4 drop-shadow-2xl">Events</h1>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white mb-4 drop-shadow-2xl">Events</h1>
           <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
             Join us for fellowship, worship, and community.
           </p>
@@ -106,7 +106,7 @@ export function EventsPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-1 h-8 bg-gradient-to-b from-crimson to-amber rounded-full" />
-            <h2 className="text-4xl font-serif font-bold text-gray-900">Upcoming Events</h2>
+            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-gray-900">Upcoming Events</h2>
           </div>
 
           <div className="space-y-6">
@@ -116,7 +116,7 @@ export function EventsPage() {
                 return (
                   <Link key={event.id} href={`/events/${event.id}`}>
                   <a
-                    className="group relative block bg-white rounded-3xl border-2 border-gray-100 hover:border-crimson/30 p-8 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+                    className="group relative block bg-white rounded-3xl border-2 border-gray-100 hover:border-crimson/30 p-5 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
                   >
                     {/* Gradient glow on hover */}
                     <div className="absolute inset-0 bg-gradient-to-r from-crimson/5 to-amber/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -139,7 +139,7 @@ export function EventsPage() {
                         </div>
                       </div>
 
-                      <h3 className="text-3xl font-serif font-bold text-gray-900 mb-4 group-hover:text-crimson transition-colors">
+                      <h3 className="text-2xl sm:text-3xl font-serif font-bold text-gray-900 mb-4 group-hover:text-crimson transition-colors break-words">
                         {event.title}
                       </h3>
 
@@ -183,7 +183,7 @@ export function EventsPage() {
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-1 h-8 bg-gradient-to-b from-gray-400 to-gray-600 rounded-full" />
-              <h2 className="text-4xl font-serif font-bold text-gray-900">Past Events</h2>
+              <h2 className="text-3xl sm:text-4xl font-serif font-bold text-gray-900">Past Events</h2>
             </div>
 
             <div className="space-y-6">

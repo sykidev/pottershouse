@@ -75,19 +75,19 @@ export function ServiceCountdown() {
 
           {/* Countdown Boxes with flip animation */}
           <div className="flex justify-center gap-2 sm:gap-4 mb-6 md:mb-8">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl px-3 sm:px-6 py-3 sm:py-4 min-w-[70px] sm:min-w-[90px] hover:bg-white/20 hover:scale-105 transition-all duration-300 cursor-default border border-white/20 shadow-lg">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl px-3 sm:px-6 py-3 sm:py-4 min-w-[64px] sm:min-w-[90px] hover:bg-white/20 hover:scale-105 transition-all duration-300 cursor-default border border-white/20 shadow-lg">
               <div className="text-2xl sm:text-4xl font-mono font-bold tabular-nums">{String(countdown.days).padStart(2, '0')}</div>
               <div className="text-xs uppercase tracking-wide mt-1 opacity-90">Days</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl px-3 sm:px-6 py-3 sm:py-4 min-w-[70px] sm:min-w-[90px] hover:bg-white/20 hover:scale-105 transition-all duration-300 cursor-default border border-white/20 shadow-lg">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl px-3 sm:px-6 py-3 sm:py-4 min-w-[64px] sm:min-w-[90px] hover:bg-white/20 hover:scale-105 transition-all duration-300 cursor-default border border-white/20 shadow-lg">
               <div className="text-2xl sm:text-4xl font-mono font-bold tabular-nums">{String(countdown.hours).padStart(2, '0')}</div>
               <div className="text-xs uppercase tracking-wide mt-1 opacity-90">Hours</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl px-3 sm:px-6 py-3 sm:py-4 min-w-[70px] sm:min-w-[90px] hover:bg-white/20 hover:scale-105 transition-all duration-300 cursor-default border border-white/20 shadow-lg">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl px-3 sm:px-6 py-3 sm:py-4 min-w-[64px] sm:min-w-[90px] hover:bg-white/20 hover:scale-105 transition-all duration-300 cursor-default border border-white/20 shadow-lg">
               <div className="text-2xl sm:text-4xl font-mono font-bold tabular-nums">{String(countdown.mins).padStart(2, '0')}</div>
               <div className="text-xs uppercase tracking-wide mt-1 opacity-90">Mins</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl px-3 sm:px-6 py-3 sm:py-4 min-w-[70px] sm:min-w-[90px] hover:bg-white/20 hover:scale-105 transition-all duration-300 cursor-default border border-white/20 shadow-lg">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl sm:rounded-2xl px-3 sm:px-6 py-3 sm:py-4 min-w-[64px] sm:min-w-[90px] hover:bg-white/20 hover:scale-105 transition-all duration-300 cursor-default border border-white/20 shadow-lg">
               <div className="text-2xl sm:text-4xl font-mono font-bold tabular-nums">{String(countdown.secs).padStart(2, '0')}</div>
               <div className="text-xs uppercase tracking-wide mt-1 opacity-90">Secs</div>
             </div>

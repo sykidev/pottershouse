@@ -29,7 +29,7 @@ export function GivePage() {
           <div className="flex justify-center mb-4">
             <HandHeart className="w-12 h-12 text-amber animate-pulse" />
           </div>
-          <h1 className="text-5xl md:text-6xl font-serif font-bold mb-4 text-white drop-shadow-2xl">{page.heroTitle}</h1>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold mb-4 text-white drop-shadow-2xl">{page.heroTitle}</h1>
           <p className="text-lg md:text-xl text-white/90 leading-relaxed max-w-2xl mx-auto">{page.heroSubtitle}</p>
         </div>
       </section>
@@ -133,7 +133,7 @@ function Row({ label, value, mono }: { label: string; value: string; mono?: bool
   return (
     <div className="flex justify-between items-baseline gap-4 border-b border-gray-100 pb-2">
       <dt className="text-gray-500 flex-shrink-0">{label}</dt>
-      <dd className={`text-gray-900 font-semibold text-right ${mono ? 'font-mono tracking-wide' : ''}`}>{value}</dd>
+      <dd className={`text-gray-900 font-semibold text-right min-w-0 ${mono ? 'font-mono tracking-wide break-all' : 'break-words'}`}>{value}</dd>
     </div>
   );
 }

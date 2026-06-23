@@ -76,7 +76,7 @@ export function AboutPage() {
           <div className="flex justify-center mb-4">
             <Sparkles className="w-10 h-10 text-gold-400 animate-pulse" />
           </div>
-          <h1 className="text-5xl md:text-6xl font-serif font-bold text-white mb-4 drop-shadow-2xl">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white mb-4 drop-shadow-2xl">
             {about?.title || 'About Us'}
           </h1>
           <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
@@ -99,7 +99,7 @@ export function AboutPage() {
               <Sparkles className="w-8 h-8 text-royal-600 animate-pulse" />
               <div className="w-16 h-0.5 bg-gradient-to-l from-transparent via-royal-600 to-royal-600" />
             </div>
-            <h2 className="text-5xl font-serif font-bold bg-gradient-to-r from-royal-700 via-purple-600 to-royal-700 bg-clip-text text-transparent mb-3">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold bg-gradient-to-r from-royal-700 via-purple-600 to-royal-700 bg-clip-text text-transparent mb-3">
               Our Story
             </h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
@@ -307,7 +307,7 @@ export function AboutPage() {
       <section className="bg-gradient-to-b from-gray-50 to-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-serif font-bold bg-gradient-to-r from-royal-700 to-purple-600 bg-clip-text text-transparent mb-4">
+            <h2 className="text-3xl sm:text-4xl font-serif font-bold bg-gradient-to-r from-royal-700 to-purple-600 bg-clip-text text-transparent mb-4">
               Our Core Values
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
@@ -345,7 +345,7 @@ export function AboutPage() {
               <Heart className="w-6 h-6 text-royal-600" />
               <div className="w-12 h-0.5 bg-gradient-to-l from-transparent to-royal-600" />
             </div>
-            <h2 className="text-4xl font-serif font-bold text-gray-900 mb-3">Our Team</h2>
+            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-gray-900 mb-3">Our Team</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Meet the passionate people dedicated to serving our church family. Hover over a card to learn more.
             </p>

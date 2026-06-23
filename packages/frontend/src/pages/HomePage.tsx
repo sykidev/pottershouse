@@ -88,7 +88,6 @@ export function HomePage() {
           backgroundImage: `linear-gradient(rgba(61, 33, 16, 0.7), rgba(139, 69, 19, 0.6)), url(${hero?.backgroundImage || 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1920'})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
         }}
       >
         {/* Animated pottery shards/particles */}
@@ -214,7 +213,7 @@ export function HomePage() {
       )}
 
       {/* Section 4 - Upcoming Events */}
-      <section className="bg-gradient-to-b from-potter-cream to-warm-white py-20 relative">
+      <section className="bg-gradient-to-b from-potter-cream to-warm-white py-12 sm:py-20 relative">
         {/* Background accent */}
         <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-royal-200/30 to-transparent rounded-full blur-3xl" />
 
@@ -226,7 +225,7 @@ export function HomePage() {
                   <span className="w-12 h-0.5 bg-gradient-to-r from-royal-600 to-gold-500"></span>
                   Join Us
                 </p>
-                <h2 className="text-5xl font-serif font-bold bg-gradient-to-r from-royal-800 to-royal-600 bg-clip-text text-transparent">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold bg-gradient-to-r from-royal-800 to-royal-600 bg-clip-text text-transparent">
                   Upcoming Events
                 </h2>
               </div>
@@ -301,14 +300,13 @@ export function HomePage() {
       <InstagramFeedEnhanced />
 
       {/* Section 7 - Call to Action */}
-      <section className="relative py-24 overflow-hidden">
+      <section className="relative py-16 sm:py-24 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
             backgroundImage: 'linear-gradient(rgba(139, 69, 19, 0.95), rgba(61, 33, 16, 0.95)), url(https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1920)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            backgroundAttachment: 'fixed',
           }}
         />
 

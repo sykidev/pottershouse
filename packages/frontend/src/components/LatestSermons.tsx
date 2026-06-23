@@ -116,7 +116,7 @@ export function LatestSermons({
               <Youtube className="w-6 h-6 text-white" />
             </div>
           </div>
-          <h2 className="text-4xl font-serif font-bold text-gray-900 mb-3">{title}</h2>
+          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-gray-900 mb-3">{title}</h2>
           <p className="text-gray-600 max-w-2xl mx-auto mb-6">{description}</p>
         </div>
 
