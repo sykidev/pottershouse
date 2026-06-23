@@ -4,7 +4,7 @@ import { apiRequest } from '@/lib/api';
 import { ServiceCountdown } from '@/components/ServiceCountdown';
 import { LivestreamBanner } from '@/components/LivestreamBanner';
 import { InstagramFeedEnhanced } from '@/components/InstagramFeedEnhanced';
-import { YouTubeChannel } from '@/components/YouTubeChannel';
+import { LatestSermons } from '@/components/LatestSermons';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
 import { Clock, MapPin, ArrowRight, Sparkles, BookOpen, Heart, Users } from 'lucide-react';
@@ -290,9 +290,8 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Section 5 - YouTube Channel Integration */}
-      <YouTubeChannel
-        channelId="YOUR_YOUTUBE_CHANNEL_ID"
+      {/* Section 5 - Latest Sermons (from the sermons DB) */}
+      <LatestSermons
         title="Latest Messages"
         description="Watch our most recent sermons and teachings. Subscribe to never miss a message!"
         limit={3}
