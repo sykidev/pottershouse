@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/api';
+import { GALLERY_TAGS } from '@/lib/site-content';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { ImageUpload } from '@/components/ui/image-upload';
+
+type Status = 'approved' | 'rejected';
 
 interface Sermon {
   id: number;
@@ -15,10 +18,15 @@ interface Sermon {
   description: string;
   videoUrl: string;
   imageUrl: string | null;
+  tag: string;
+  status: Status;
 }
+
+const selectCls = 'h-9 rounded-md border border-input bg-background px-2 text-sm';
 
 export function AdminSermonsPage() {
   const queryClient = useQueryClient();
+  const [tab, setTab] = useState<Status>('approved');
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formData, setFormData] = useState({
@@ -30,9 +38,15 @@ export function AdminSermonsPage() {
     imageUrl: '',
   });
 
+  // Public list reads approved-only; admin reads by tab. Invalidate both.
+  const invalidate = () => {
+    queryClient.invalidateQueries({ queryKey: ['sermons'] });
+    queryClient.invalidateQueries({ queryKey: ['sermons-admin'] });
+  };
+
   const { data: sermons } = useQuery({
-    queryKey: ['sermons'],
-    queryFn: () => apiRequest<Sermon[]>('/sermons'),
+    queryKey: ['sermons-admin', tab],
+    queryFn: () => apiRequest<Sermon[]>(`/sermons/admin?status=${tab}`),
   });
 
   const createMutation = useMutation({
@@ -41,7 +55,7 @@ export function AdminSermonsPage() {
       body: JSON.stringify(data),
     }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['sermons'] });
+      invalidate();
       resetForm();
     },
   });
@@ -53,22 +67,27 @@ export function AdminSermonsPage() {
         body: JSON.stringify(data),
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['sermons'] });
+      invalidate();
       resetForm();
     },
   });
 
+  // Approve / reject or retag without re-sending the whole sermon.
+  const patchMutation = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: { status?: Status; tag?: string } }) =>
+      apiRequest(`/sermons/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+    onSuccess: invalidate,
+  });
+
   const deleteMutation = useMutation({
     mutationFn: (id: number) => apiRequest(`/sermons/${id}`, { method: 'DELETE' }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['sermons'] });
-    },
+    onSuccess: invalidate,
   });
 
   const syncMutation = useMutation({
     mutationFn: () => apiRequest<{ imported: number; found: number }>('/sermons/sync-youtube', { method: 'POST' }),
     onSuccess: (res) => {
-      queryClient.invalidateQueries({ queryKey: ['sermons'] });
+      invalidate();
       alert(`Synced from YouTube: ${res.imported} new sermon(s) imported (of ${res.found} live broadcasts found).`);
     },
     onError: (err) => {
@@ -214,7 +233,35 @@ export function AdminSermonsPage() {
         </Card>
       )}
 
+      {/* Approved / Rejected tabs. Approved sermons show on the public site;
+          rejected ones are hidden but kept so they can be restored. */}
+      {!isEditing && (
+        <div className="flex gap-2 mb-6">
+          {(['approved', 'rejected'] as Status[]).map((s) => (
+            <button
+              key={s}
+              type="button"
+              onClick={() => setTab(s)}
+              className={`px-4 py-2 rounded-full text-sm font-medium capitalize transition-colors ${
+                tab === s
+                  ? 'bg-crimson text-white shadow'
+                  : 'bg-white text-gray-600 border border-gray-200 hover:text-crimson'
+              }`}
+            >
+              {s} {sermons && tab === s ? `(${sermons.length})` : ''}
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className="grid gap-6">
+        {sermons?.length === 0 && (
+          <p className="text-sm text-gray-500">
+            {tab === 'approved'
+              ? 'No approved sermons yet. Sync from YouTube or add one.'
+              : 'No rejected sermons.'}
+          </p>
+        )}
         {sermons?.map((sermon) => (
           <Card key={sermon.id}>
             <CardHeader>
@@ -225,10 +272,38 @@ export function AdminSermonsPage() {
             </CardHeader>
             <CardContent>
               <p className="text-gray-700 mb-4">{sermon.description}</p>
-              <div className="flex space-x-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <label className="text-sm text-gray-600">Tag</label>
+                <select
+                  className={selectCls}
+                  value={sermon.tag}
+                  onChange={(e) => patchMutation.mutate({ id: sermon.id, data: { tag: e.target.value } })}
+                >
+                  {GALLERY_TAGS.map((t) => (
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
+                  ))}
+                </select>
                 <Button size="sm" onClick={() => handleEdit(sermon)}>
                   Edit
                 </Button>
+                {sermon.status === 'approved' ? (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => patchMutation.mutate({ id: sermon.id, data: { status: 'rejected' } })}
+                  >
+                    Reject
+                  </Button>
+                ) : (
+                  <Button
+                    size="sm"
+                    onClick={() => patchMutation.mutate({ id: sermon.id, data: { status: 'approved' } })}
+                  >
+                    Approve
+                  </Button>
+                )}
                 <Button
                   size="sm"
                   variant="destructive"

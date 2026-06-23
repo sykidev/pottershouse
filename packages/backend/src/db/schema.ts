@@ -12,6 +12,10 @@ export const sermons = pgTable('sermons', {
   description: text('description').notNull(),
   videoUrl: text('video_url').notNull(),
   imageUrl: text('image_url'),
+  // Sermons are auto-approved (manual adds + YouTube sync), but an admin can
+  // reject one to pull it off the public site. Tags reuse the gallery tag set.
+  tag: text('tag').notNull().default('General'),
+  status: text('status').notNull().default('approved'), // 'approved' | 'rejected'
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
@@ -95,6 +99,14 @@ export const insertSermonSchema = createInsertSchema(sermons, {
   description: z.string().min(1),
   videoUrl: z.string().url(),
   imageUrl: imageUrlSchema,
+  tag: z.string().optional(),
+  status: z.enum(['approved', 'rejected']).optional(),
+});
+
+// Fields the admin may patch on an existing sermon (approve/reject, retag).
+export const updateSermonSchema = z.object({
+  tag: z.string().optional(),
+  status: z.enum(['approved', 'rejected']).optional(),
 });
 
 export const selectSermonSchema = createSelectSchema(sermons);

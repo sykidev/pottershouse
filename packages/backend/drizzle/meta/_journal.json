@@ -15,6 +15,13 @@
       "when": 1781350900000,
       "tag": "0001_gallery_images",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1781351000000,
+      "tag": "0002_sermon_status_tag",
+      "breakpoints": true
     }
   ]
 }
