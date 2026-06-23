@@ -42,8 +42,9 @@ export function GalleryPage() {
     permalink: r.permalink || '',
   }));
 
-  // 'General' is the catch-all tag — it's identical to the "All" filter, so omit it here.
-  const usedTags = GALLERY_TAGS.filter((t) => t !== 'General' && items.some((i) => i.tag === t));
+  // Always show the configured category buttons (except 'General', the
+  // catch-all that's identical to the "All" filter).
+  const usedTags = GALLERY_TAGS.filter((t) => t !== 'General');
   const filtered = activeTag === 'All' ? items : items.filter((i) => i.tag === activeTag);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
@@ -134,6 +135,9 @@ export function GalleryPage() {
                   </button>
                 ))}
               </div>
+              {filtered.length === 0 && (
+                <p className="text-center text-gray-500 py-12">No photos in this category yet.</p>
+              )}
               <Pagination page={currentPage} totalPages={totalPages} onChange={setPageNum} />
             </>
           )}

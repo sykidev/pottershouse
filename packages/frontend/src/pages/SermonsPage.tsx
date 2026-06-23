@@ -46,9 +46,9 @@ export function SermonsPage() {
 
   const youtubeChannelId = contentData?.data?.youtubeChannelId;
 
-  // Only show tags that actually have sermons.
-  // 'General' is the catch-all tag — identical to the "All" filter, so omit it here.
-  const usedTags = SERMON_TAGS.filter((t) => t !== 'General' && sermons?.some((s) => s.tag === t));
+  // Always show the configured category buttons (except 'General', the
+  // catch-all that's identical to the "All" filter).
+  const usedTags = SERMON_TAGS.filter((t) => t !== 'General');
   const filtered = activeTag === 'All' ? sermons ?? [] : (sermons ?? []).filter((s) => s.tag === activeTag);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
