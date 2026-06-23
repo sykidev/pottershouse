@@ -105,64 +105,50 @@ export function MinistryDetailPage() {
         </div>
       </section>
 
-      {/* Photo gallery — images tagged for this ministry */}
-      <section className="bg-gradient-to-b from-white to-gray-50 py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <div className="flex justify-center items-center gap-2 mb-4">
-              <div className="w-12 h-0.5 bg-gradient-to-r from-transparent to-crimson" />
-              <Camera className="w-6 h-6 text-crimson" />
-              <div className="w-12 h-0.5 bg-gradient-to-l from-transparent to-crimson" />
+      {/* Photo gallery — only shown when images are tagged for this ministry */}
+      {photos.length > 0 && (
+        <section className="bg-gradient-to-b from-white to-gray-50 py-16">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-10">
+              <div className="flex justify-center items-center gap-2 mb-4">
+                <div className="w-12 h-0.5 bg-gradient-to-r from-transparent to-crimson" />
+                <Camera className="w-6 h-6 text-crimson" />
+                <div className="w-12 h-0.5 bg-gradient-to-l from-transparent to-crimson" />
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-serif font-bold text-gray-900 mb-2">Photo Gallery</h2>
+              <p className="text-gray-600">Moments from {ministry.title}</p>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-gray-900 mb-2">Photo Gallery</h2>
-            <p className="text-gray-600">
-              {photos.length > 0
-                ? `Moments from ${ministry.title}`
-                : `Photos from ${ministry.title} will appear here soon.`}
-            </p>
-          </div>
 
-          {photos.length > 0 ? (
-            <>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-                {photos.map((img) => (
-                  <button
-                    key={img.id}
-                    type="button"
-                    onClick={() => setLightbox(img)}
-                    className="group relative aspect-square overflow-hidden rounded-2xl bg-gray-100 shadow-sm hover:shadow-xl transition-all"
-                  >
-                    <img
-                      src={img.imageUrl}
-                      alt={img.caption || ministry.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
-                      {img.caption && <p className="text-white text-xs font-medium drop-shadow line-clamp-2">{img.caption}</p>}
-                    </div>
-                  </button>
-                ))}
-              </div>
-              <div className="text-center mt-10">
-                <Link href="/gallery">
-                  <a className="inline-flex items-center gap-2 text-crimson font-semibold hover:underline">
-                    View full gallery <ArrowRight className="w-4 h-4" />
-                  </a>
-                </Link>
-              </div>
-            </>
-          ) : (
-            <div className="text-center py-12 bg-white rounded-3xl border border-dashed border-gray-200 max-w-2xl mx-auto">
-              <Camera className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500">Check back soon for photos from this ministry.</p>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+              {photos.map((img) => (
+                <button
+                  key={img.id}
+                  type="button"
+                  onClick={() => setLightbox(img)}
+                  className="group relative aspect-square overflow-hidden rounded-2xl bg-gray-100 shadow-sm hover:shadow-xl transition-all"
+                >
+                  <img
+                    src={img.imageUrl}
+                    alt={img.caption || ministry.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                    {img.caption && <p className="text-white text-xs font-medium drop-shadow line-clamp-2">{img.caption}</p>}
+                  </div>
+                </button>
+              ))}
+            </div>
+            <div className="text-center mt-10">
               <Link href="/gallery">
-                <a className="inline-block mt-4 text-crimson font-semibold hover:underline">Browse the full gallery →</a>
+                <a className="inline-flex items-center gap-2 text-crimson font-semibold hover:underline">
+                  View full gallery <ArrowRight className="w-4 h-4" />
+                </a>
               </Link>
             </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       {/* Lightbox */}
       {lightbox && (
